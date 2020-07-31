@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView( // /!\ important because of the telephone keypad which causes a "RenderFlex overflowed by x pixels on the bottom" error
         CodeEditor(
           model: model, // the model created above
-          onSubmit: (String language, String value) {}, // when the user confirms changes in one of the files.
+          onSubmit: (String language, String value) {}, // when the user confirms changes in one of the files
         ),
       ),
     );
@@ -65,6 +65,48 @@ class HomePage extends StatelessWidget {
 }
 ```
 
+For the style options, you have a lot of possibilites : 
+
+```
+// the class, to show you what you can change
+class EditorModelStyleOptions {
+  final EdgeInsets padding;
+  final double heightOfContainer;
+  final Map<String, TextStyle> theme;
+  final String fontFamily;
+  final double letterSpacing;
+  final double fontSize;
+  final double lineHeight;
+  final int tabSize;
+  final Color editorColor;
+  final Color editorBorderColor;
+  final Color editorFilenameColor;
+  final Color editorToolButtonColor;
+  final Color editorToolButtonTextColor;
+}
+```
+
+In order to modify the edit button, use :
+
+```
+// into EditorModelStyleOptions : 
+(void) defineEditButtonProperties(color: Colors.red, textColor: Colors.white, text: "Edit")
+```
+
+You can also change the position of the edit button
+
+```
+// into EditorModelStyleOptions :
+(void) defineEditButtonPosition(bottom: 10, right: 15) // default values
+
+// WARNING
+// if top < 50 => top = 50
+// minimum value of top is 50 because of the height of the navbar
+```
+
+## Notable issue
+
+For the moment, I haven't been able to fix a slight bug that occurs when there is a lot of code. Indeed, when the code goes out of the text field, and the user clicks on it to be able to write in it, he can't go all the way down because of the phone keypad.
 
 ## Internal dependencies
 
@@ -72,7 +114,6 @@ code_editor uses the following dependencies to work :
 1. flutter_highlight
 2. provider
 3. font_awesome_flutter
-
 
 ## Contributing
 
