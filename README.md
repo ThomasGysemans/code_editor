@@ -1,6 +1,6 @@
 # code_editor
 
-A CSS, HTML and Javascript code editor for Android.
+A CSS, HTML and Javascript code editor for Android (Flutter).
 
 ## Description
 
@@ -30,7 +30,25 @@ $ flutter pub get
 import 'package:code_editor/code_editor.dart';
 ```
 
-## Dependencies
+## Usage
+
+After importing the package into your project, you can initiliaze an EditorModel to control the editor :
+
+```
+Map<String, String> code = {
+  "html": "<!DOCTYPE html>\n\t<html lang='fr'>",
+  "css": "span {}",
+  "js": "console.log('Hello, World!')",
+};
+
+EditorModel model = new EditorModel(
+  code: code, // if not specified, the html, css and js files will be empty
+  styleOptions: EditorModelStyleOptions(), // to control the styles of the editor
+);
+```
+
+
+## Internal dependencies
 
 code_editor uses the following dependencies to work :
 1. flutter_highlight
