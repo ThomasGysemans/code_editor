@@ -33,9 +33,9 @@ import 'package:code_editor/code_editor.dart';
 ## Dependencies
 
 code_editor uses the following dependencies to work :
-flutter_highlight
-provider
-font_awesome_flutter
+1. flutter_highlight
+2. provider
+3. font_awesome_flutter
 
 ## License
 
