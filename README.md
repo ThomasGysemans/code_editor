@@ -38,6 +38,9 @@ After importing the package into your project, you can initiliaze an EditorModel
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // the code to display for the wanted language.
+    // code_editor creates a "file" for each language.
+    // example : for html, it creates "index.html" in the navbar of the editor
     Map<String, String> code = {
       "html": "<!DOCTYPE html>\n\t<html lang='fr'>",
       "css": "span {}",
