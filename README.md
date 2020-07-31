@@ -1,14 +1,8 @@
 # code_editor
 
-A new Flutter package project.
+A CSS, HTML and Javascript code editor for Android.
 
-## Getting Started
+## Description
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+With this code editor, you can, for the moment, allow your users to edit three files: "index.html", "style.css" and "app.js". You can switch between these three files to edit their content with tools that make writing easier. Once editing is complete, the code is highlighted according to the imposed theme (by default a custom one).
+You can choose your theme of create your own by : import 'package:flutter_highlight/themes/github.dart';
