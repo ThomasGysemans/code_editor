@@ -104,6 +104,31 @@ You can also change the position of the edit button
 // minimum value of top is 50 because of the height of the navbar
 ```
 
+The default values of EditorModelStyleOptions are :
+
+```
+padding = const EdgeInsets.all(15.0),
+heightOfContainer = 300,
+theme: myTheme, // the custom theme
+fontFamily: "monospace", // "Poppins" is a good font family too
+fontSize: 15,
+lineHeight: 1.6,
+tabSize: 2, // do not use a to high number
+editorColor: Color(0xff2E3152),
+editorBorderColor: Color(0xFF3E416E), // the color of the borders between elements in the editor
+editorFilenameColor: Color(0xFF6CD07A), // the color of the file's name
+editorToolButtonColor:  Color(0xFF4650c7), // the tool's buttons
+editorToolButtonTextColor: Colors.white
+
+// with defineEditButtonProperties()
+editButtonTextColor: Colors.black,
+editButtonName: "Edit"
+
+// with defineEditButtonPosition()
+editButtonPosBottom: 10,
+editButtonPosRight: 15
+```
+
 ## Notable issue
 
 For the moment, I haven't been able to fix a slight bug that occurs when there is a lot of code. Indeed, when the code goes out of the text field, and the user clicks on it to be able to write in it, he can't go all the way down because of the phone keypad.
