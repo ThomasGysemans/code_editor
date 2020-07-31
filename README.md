@@ -35,16 +35,31 @@ import 'package:code_editor/code_editor.dart';
 After importing the package into your project, you can initiliaze an EditorModel to control the editor :
 
 ```
-Map<String, String> code = {
-  "html": "<!DOCTYPE html>\n\t<html lang='fr'>",
-  "css": "span {}",
-  "js": "console.log('Hello, World!')",
-};
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Map<String, String> code = {
+      "html": "<!DOCTYPE html>\n\t<html lang='fr'>",
+      "css": "span {}",
+      "js": "console.log('Hello, World!')",
+    };
 
-EditorModel model = new EditorModel(
-  code: code, // if not specified, the html, css and js files will be empty
-  styleOptions: EditorModelStyleOptions(), // to control the styles of the editor
-);
+    EditorModel model = new EditorModel(
+      code: code, // if not specified, the html, css and js files will be empty
+      styleOptions: EditorModelStyleOptions(), // to control the styles of the editor, not required because the editor have default styles
+    );
+
+    return Scaffold(
+      appBar: AppBar(title: Text("code_editor example")),
+      body: SingleChildScrollView( // /!\ important because of the telephone keypad which causes a "RenderFlex overflowed by x pixels on the bottom" error
+        CodeEditor(
+          model: model, // the model created above
+          onSubmit: (String language, String value) {}, // when the user confirms changes in one of the files.
+        ),
+      ),
+    );
+  }
+}
 ```
 
 
@@ -55,10 +70,11 @@ code_editor uses the following dependencies to work :
 2. provider
 3. font_awesome_flutter
 
-## License
-
-MIT License
 
 ## Contributing
 
 Do not hesitate to contribute to the project, i just begin :)
+
+## License
+
+MIT License
