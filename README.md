@@ -1,10 +1,10 @@
 # code_editor
 
-A CSS, HTML and Javascript code editor for Flutter with syntax highlighting and custom theme.
+A code editor (dart, js, html, ...) for Flutter with syntax highlighting and custom theme.
 
 ## Description
 
-The editor displays the contents of fictitious "files" that correspond to a FileEditor, each file has properties such as its name (index.html), its content ("<p>hi</p>") and the language this file uses.
+The editor displays the contents of fictitious "files" that correspond to a FileEditor, each file has properties such as its name (index.html), its content and the language this file uses.
 
 In other words, with this code editor, you can edit files, wich contain code. You can switch between the files in the navigation bar to edit their content with tools that make writing easier. Once editing is complete, the code is highlighted according to the imposed theme (by default a custom one).
 You can choose your theme or create your own by checking at "import 'package:flutter_highlight/themes/github.dart';"
