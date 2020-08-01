@@ -4,8 +4,10 @@ A CSS, HTML and Javascript code editor for Flutter with syntax highlighting and 
 
 ## Description
 
-With this code editor, you can, for the moment, allow your users to edit three files: "index.html", "style.css" and "app.js". You can switch between these three files to edit their content with tools that make writing easier. Once editing is complete, the code is highlighted according to the imposed theme (by default a custom one).
-You can choose your theme of create your own by : import 'package:flutter_highlight/themes/github.dart';
+The editor displays the contents of fictitious "files" that correspond to a FileEditor, each file has properties such as its name (index.html), its content ("<p>hi</p>") and the language this file uses.
+
+In other words, with this code editor, you can edit files, wich contain code. You can switch between the files in the navigation bar to edit their content with tools that make writing easier. Once editing is complete, the code is highlighted according to the imposed theme (by default a custom one).
+You can choose your theme or create your own by checking at "import 'package:flutter_highlight/themes/github.dart';"
 
 ![example-1](https://learnweb.sciencesky.fr/code_editor_example-1.png)
 ![example-2](https://learnweb.sciencesky.fr/code_editor_example-2.png)
@@ -19,7 +21,7 @@ It's very easy to install :
 
 ```
 dependencies:
-  code_editor: ^0.0.1
+  code_editor: ^0.1.0
 ```
 
 * Don't forget to update the modifications of the pubspec.yaml file
@@ -42,23 +44,50 @@ After importing the package into your project, you can initiliaze an EditorModel
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // the code to display for the wanted language.
-    // code_editor creates a "file" for each language.
-    // example : for html, it creates "index.html" in the navbar of the editor
-    Map<String, String> code = {
-      "html": "<!DOCTYPE html>\n\t<html lang='fr'>",
-      "css": "span {}",
-      "js": "console.log('Hello, World!')",
-    };
+    // example of a easier way to write code instead of writing it in a single string
+    List<String> contentOfPage1 = [
+      "<!DOCTYPE html>",
+      "<html lang='fr'>",
+      "\t<body>",
+      "\t\t<a href='page2.html'>go to page 2</a>",
+      "\t</body>",
+      "</html>",
+    ];
 
+    // the files displayed in the navigation bar of the editor
+    // you are not limited
+    // name and language are @required, by default code = ""
+    List<FileEditor> files = [
+      new FileEditor(
+        name: "page1.html",
+        language: "html",
+        code: contentOfPage1.join("\n"), // [code] needs a string
+      ),
+      new FileEditor(
+        name: "page2.html",
+        language: "html",
+        code: "<a href='page1.html'>go back</a>",
+      ),
+      new FileEditor(
+        name: "style.css",
+        language: "css",
+        code: "a { color: red; }",
+      ),
+    ];
+    
+    // the model used by the CodeEditor widget, you need it in order to control it
     EditorModel model = new EditorModel(
-      code: code, // if not specified, the html, css and js files will be empty
-      styleOptions: EditorModelStyleOptions(), // to control the styles of the editor, not required because the editor have default styles
+      files,
+      // you can customize the editor as you want
+      styleOptions: new EditorModelStyleOptions(
+        fontSize: 13,
+      ),
     );
-
+    
     return Scaffold(
       appBar: AppBar(title: Text("code_editor example")),
       body: SingleChildScrollView( // /!\ important because of the telephone keypad which causes a "RenderFlex overflowed by x pixels on the bottom" error
+        // display the CodeEditor widget
         CodeEditor(
           model: model, // the model created above
           onSubmit: (String language, String value) {}, // when the user confirms changes in one of the files
