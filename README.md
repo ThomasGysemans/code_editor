@@ -1,6 +1,6 @@
 # code_editor
 
-A CSS, HTML and Javascript code editor for Android (Flutter).
+A CSS, HTML and Javascript code editor for Flutter with syntax highlighting and custom theme.
 
 ## Description
 

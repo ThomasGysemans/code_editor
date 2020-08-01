@@ -1,8 +1,7 @@
 name: code_editor
-description: A code editor for Android.
-version: 0.0.1
-author: CodoPixel
-homepage:
+description: A CSS, HTML and Javascript code editor for Flutter with syntax highlighting and custom theme.
+version: 0.1.0
+homepage: https://github.com/CodoPixel/code_editor
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -12,7 +11,6 @@ dependencies:
     sdk: flutter
   
   flutter_highlight: ^0.6.0
-  highlight_text: ^0.7.2
   provider: ^4.3.1
   font_awesome_flutter: ^8.8.1
 

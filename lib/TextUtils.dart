@@ -1,4 +1,4 @@
-part of code_editor;
+import 'package:flutter/material.dart';
 
 /// helper for Text widget
 class TextUtils extends Text {

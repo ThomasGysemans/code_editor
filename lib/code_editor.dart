@@ -5,11 +5,12 @@ import 'package:flutter_highlight/flutter_highlight.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-part 'Theme.dart';
-part 'TextUtils.dart';
-part 'ToolButton.dart';
+import 'TextUtils.dart';
+import 'ToolButton.dart';
+
 part 'EditorModel.dart';
 part 'EditorModelStyleOptions.dart';
+part 'Theme.dart';
 
 class CodeEditor extends StatelessWidget {
   final EditorModel model;
@@ -37,7 +38,7 @@ class CodeEditor extends StatelessWidget {
               // we have to pass a initalCode because we must initialize
               // the inital text of the text field in initState()
               // through the controller
-              initialCode: model.code[model.currentLanguage],
+              initialCode: model.getCodeWithIndex(0),
               onSubmit: this.onSubmit ?? (String language, String value) {},
             ),
           ],
@@ -96,7 +97,8 @@ class __ContentEditorState extends State<_ContentEditor> {
         TextPosition(offset: pos),
       );
     } catch (e) {
-      throw "code_editor package : placeCursor(int pos), pos is not valid.";
+      throw Exception(
+          "code_editor package : placeCursor(int pos), pos is not valid.");
     }
   }
 
@@ -134,7 +136,8 @@ class __ContentEditorState extends State<_ContentEditor> {
   Widget build(BuildContext context) {
     EditorModel model = context.watch<EditorModel>();
     String language = model.currentLanguage;
-    String code = model.code[language];
+    int position = model.position;
+    String code = model.getCodeWithIndex(position);
 
     // when we change the file in the navbar, the code in the text field
     // isn't updated, so we update it here,
@@ -320,7 +323,7 @@ class __ContentEditorState extends State<_ContentEditor> {
               ),
               // The OK button
               editButton("OK", () {
-                model.changeCodeOfLanguage(language, newValue);
+                model.updateCodeOfIndex(position, newValue);
                 model.toggleEditing();
                 widget.onSubmit(language, newValue);
               }),
@@ -365,10 +368,9 @@ class _NavBarFiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     EditorModel model = context.watch<EditorModel>();
-    int index = model.index;
-
     EditorModelStyleOptions opt = model.styleOptions;
 
+    /// the filename in green
     TextUtils showFilename(String name, bool isSelected) {
       return TextUtils(
         name,
@@ -381,34 +383,30 @@ class _NavBarFiles extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 60,
-      padding: EdgeInsets.symmetric(horizontal: 15.0),
       decoration: BoxDecoration(
         color: opt.editorColor,
         border: Border(bottom: BorderSide(color: opt.editorBorderColor)),
       ),
-      child: Row(
-        children: <Widget>[
-          GestureDetector(
-            child: showFilename("index.html", index == 1),
-            onTap: () {
-              model.changeIndexTo(1);
-            },
-          ),
-          SizedBox(width: 15),
-          GestureDetector(
-            child: showFilename("style.css", index == 2),
-            onTap: () {
-              model.changeIndexTo(2);
-            },
-          ),
-          SizedBox(width: 15),
-          GestureDetector(
-            child: showFilename("app.js", index == 3),
-            onTap: () {
-              model.changeIndexTo(3);
-            },
-          ),
-        ],
+      child: ListView.builder(
+        padding: EdgeInsets.only(left: 15),
+        itemCount: model.numberOfFiles,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, int index) {
+          final FileEditor file = model.getFileWithIndex(index);
+
+          return Container(
+            margin: EdgeInsets.only(right: 15),
+            child: Center(
+              child: GestureDetector(
+                // check if the position of the navbar is the current file
+                child: showFilename(file.name, model.position == index),
+                onTap: () {
+                  model.changeIndexTo(index);
+                },
+              ),
+            ),
+          );
+        },
       ),
     );
   }

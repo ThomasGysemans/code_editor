@@ -47,7 +47,7 @@ class EditorModelStyleOptions {
     textColor,
     text,
   }) {
-    this.editButtonColor = color ?? editButtonColor;
+    this.editButtonColor = color;
     this.editButtonTextColor = textColor;
     this.editButtonName = text ?? editButtonName;
   }

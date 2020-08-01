@@ -1,4 +1,4 @@
-part of code_editor;
+import 'package:flutter/material.dart';
 
 class ToolButton {
   Function press;
