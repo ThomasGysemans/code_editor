@@ -21,7 +21,7 @@ It's very easy to install :
 
 ```
 dependencies:
-  code_editor: ^0.1.0
+  code_editor: ^0.1.2
 ```
 
 * Don't forget to update the modifications of the pubspec.yaml file
@@ -111,6 +111,7 @@ class EditorModelStyleOptions {
   final double fontSize;
   final double lineHeight;
   final int tabSize;
+  final double fontSizeOfFilename;
   final Color editorColor;
   final Color editorBorderColor;
   final Color editorFilenameColor;
@@ -147,6 +148,7 @@ fontFamily: "monospace", // "Poppins" is a good font family too
 fontSize: 15,
 lineHeight: 1.6,
 tabSize: 2, // do not use a to high number
+fontSizeOfFilename: null,
 editorColor: Color(0xff2E3152),
 editorBorderColor: Color(0xFF3E416E), // the color of the borders between elements in the editor
 editorFilenameColor: Color(0xFF6CD07A), // the color of the file's name
@@ -164,7 +166,7 @@ editButtonPosRight: 15
 
 ## Notable issue
 
-For the moment, I haven't been able to fix a slight bug that occurs when there is a lot of code. Indeed, when the code goes out of the text field, and the user clicks on it to be able to write in it, he can't go all the way down because of the phone keypad.
+For the moment, I haven't been able to fix a slight bug that occurs when there is a lot of code. Indeed, when the code goes out of the text field, and the user clicks on it to be able to write in it, he can't go all the way down because of the phone keyboard.
 
 ## Internal dependencies
 
@@ -175,7 +177,7 @@ code_editor uses the following dependencies to work :
 
 ## Contributing
 
-Do not hesitate to contribute to the project, i just begin :)
+Do not hesitate to contribute to the project, I just begin :)
 
 ## License
 

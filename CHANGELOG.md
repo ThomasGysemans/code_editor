@@ -1,3 +1,11 @@
+## [0.1.2] - Aug 6, 2020
+
+onSubmit parameter is not required anynome inside the CodeEditor Widget.
+
++ A new parameter : bool edit, by default its value is true. Set it to false if you want to disable file editing. Use it inside the CodeEditor Widget.
+
++ New parameter inside EditorModelStyleOptions : double fontSizeOfFilename, the font size of the files' names.
+
 ## [0.1.1] - Aug 1, 2020
 
 Minor changes

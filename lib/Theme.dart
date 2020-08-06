@@ -17,6 +17,12 @@ const Color keywordColor = Color(0xFF3E9CD6); // keywords (function, ...)
 const Color methodsColor = Color(0xFFDCDC9D); // methods built in
 const Color titlesColor = Color(0xFFDCDC9D); // titles (function's title)
 
+/// The theme used by code_editor and created by code_editor. This is the default theme of the editor.
+///
+/// You can create your own or use
+/// others themes by looking at :
+///
+/// `import 'package:flutter_highlight/themes/'`.
 const myTheme = {
   'root': TextStyle(
     backgroundColor: Color(0xff2E3152),

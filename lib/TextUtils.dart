@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// helper for Text widget
+/// Helper for Text widget.
 class TextUtils extends Text {
   TextUtils(
     String data, {

@@ -12,17 +12,41 @@ part 'EditorModel.dart';
 part 'EditorModelStyleOptions.dart';
 part 'Theme.dart';
 
+/// Creates a code editor that helps users to write and read code.
+///
+/// In order to use it, you must define :
+/// * [model] an EditorModel, to control the editor, its content and its files
+/// * [onSubmit] a Function(String language, String value) executed when the user submits changes in a file.
 class CodeEditor extends StatelessWidget {
+  /// The EditorModel in order to control the editor.
+  ///
+  /// This argument is @required.
   final EditorModel model;
+
+  /// onSubmit function to execute when the user saves changes in a file.
+  /// This is a function that takes [language] and [value] as arguments.
+  ///
+  /// * [language] is the language of the file edited by the user.
+  /// * [value] is the content of the file.
   final Function(String language, String value) onSubmit;
+
+  /// You can disable the edit button (it won't show up at all) just like this :
+  ///
+  /// ```
+  /// CodeEditor(
+  ///   model: model, // my EditorModel()
+  ///   edit: false, // disable the edit button
+  /// )
+  /// ```
+  ///
+  /// By default, the value is true.
+  final bool edit;
+
   CodeEditor({
     Key key,
-
-    /// the EditorModel in order to control the editor
     @required this.model,
-
-    /// onSubmit function to execute when the user saves changes in a file
-    @required this.onSubmit,
+    this.onSubmit,
+    this.edit = true,
   }) : super(key: key);
 
   @override
@@ -40,6 +64,7 @@ class CodeEditor extends StatelessWidget {
               // through the controller
               initialCode: model.getCodeWithIndex(0),
               onSubmit: this.onSubmit ?? (String language, String value) {},
+              edit: edit,
             ),
           ],
         ),
@@ -51,10 +76,12 @@ class CodeEditor extends StatelessWidget {
 class _ContentEditor extends StatefulWidget {
   final String initialCode;
   final Function onSubmit;
+  final bool edit;
   _ContentEditor({
     Key key,
     @required this.initialCode,
     @required this.onSubmit,
+    @required this.edit,
   }) : super(key: key);
 
   @override
@@ -71,7 +98,7 @@ class __ContentEditorState extends State<_ContentEditor> {
   void initState() {
     super.initState();
 
-    /// initialize the controller for the text field
+    /// Initialize the controller for the text field.
     editingController = TextEditingController(text: widget.initialCode);
     newValue = widget.initialCode; // if there are no changes
   }
@@ -82,14 +109,15 @@ class __ContentEditorState extends State<_ContentEditor> {
     super.dispose();
   }
 
-  /// set the cursor at the end of the editableText
+  /// Set the cursor at the end of the editableText.
   void placeCursorAtTheEnd() {
     editingController.selection = TextSelection.fromPosition(
       TextPosition(offset: editingController.text.length),
     );
   }
 
-  /// place the cursor where wanted
+  /// Place the cursor where wanted.
+  ///
   /// [pos] places the cursor in the text field
   void placeCursor(int pos) {
     try {
@@ -102,7 +130,7 @@ class __ContentEditorState extends State<_ContentEditor> {
     }
   }
 
-  /// creates the text field
+  /// Creates the text field.
   SingleChildScrollView buildEditableText() {
     return SingleChildScrollView(
       child: Container(
@@ -139,37 +167,44 @@ class __ContentEditorState extends State<_ContentEditor> {
     int position = model.position;
     String code = model.getCodeWithIndex(position);
 
-    // when we change the file in the navbar, the code in the text field
-    // isn't updated, so we update it here,
-    // with newValue = code if the user does not change the value
+    // When we change the file in the navbar, the code in the text field
+    // isn't updated, so we update it here.
+    //
+    // With newValue = code if the user does not change the value
     // in the text field
     editingController = TextEditingController(text: code);
     newValue = code;
 
     EditorModelStyleOptions opt = model.styleOptions;
 
-    /// create the edit button and the save button ("OK") with a
-    /// particual function onPress to execute
-    Positioned editButton(String name, Function press) {
-      return Positioned(
-        bottom: opt.editButtonPosBottom,
-        right: opt.editButtonPosRight,
-        top: opt.editButtonPosTop,
-        left: opt.editButtonPosLeft,
-        child: RaisedButton(
-          onPressed: press,
-          color: opt.editButtonColor,
-          child: TextUtils(
-            name,
-            color: opt.editButtonTextColor,
+    /// Creates the edit button and the save button ("OK") with a
+    /// particual function [press] to execute.
+    ///
+    /// This button won't appear if `edit = false`.
+    Widget editButton(String name, Function press) {
+      if (widget.edit != false) {
+        return Positioned(
+          bottom: opt.editButtonPosBottom,
+          right: opt.editButtonPosRight,
+          top: opt.editButtonPosTop,
+          left: opt.editButtonPosLeft,
+          child: RaisedButton(
+            onPressed: press,
+            color: opt.editButtonColor,
+            child: TextUtils(
+              name,
+              color: opt.editButtonTextColor,
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        return SizedBox.shrink();
+      }
     }
 
-    /// add a particular string where the cursor is in the text field
-    /// [str] the string to insert
-    /// [diff] by default, the the cursor is placed after the string placed, but you can change this (Exemple: -1 for "" placed)
+    /// Add a particular string where the cursor is in the text field.
+    /// * [str] the string to insert
+    /// * [diff] by default, the the cursor is placed after the string placed, but you can change this (Exemple: -1 for "" placed)
     void insertIntoTextField(String str, {int diff = 0}) {
       // get the position of the cursor in the text field
       int pos = editingController.selection.baseOffset;
@@ -191,7 +226,7 @@ class __ContentEditorState extends State<_ContentEditor> {
       placeCursor(pos + str.length + diff);
     }
 
-    /// create the toolbar
+    /// Creates the toolbar.
     Widget toolBar() {
       List<ToolButton> toolButtons = [
         ToolButton(
@@ -292,12 +327,12 @@ class __ContentEditorState extends State<_ContentEditor> {
       );
     }
 
-    // we place the cursor in the end of the text field
+    // We place the cursor in the end of the text field.
     if (model.isEditing) {
       placeCursorAtTheEnd();
     }
 
-    // we toggle the editor and the text field
+    // We toggle the editor and the text field.
     return model.isEditing
         ? Stack(
             children: <Widget>[
@@ -370,10 +405,11 @@ class _NavBarFiles extends StatelessWidget {
     EditorModel model = context.watch<EditorModel>();
     EditorModelStyleOptions opt = model.styleOptions;
 
-    /// the filename in green
+    /// The filename in green.
     TextUtils showFilename(String name, bool isSelected) {
       return TextUtils(
         name,
+        fontSize: opt.fontSizeOfFilename,
         color: isSelected
             ? opt.editorFilenameColor
             : opt.editorFilenameColor.withOpacity(0.5),
@@ -398,7 +434,7 @@ class _NavBarFiles extends StatelessWidget {
             margin: EdgeInsets.only(right: 15),
             child: Center(
               child: GestureDetector(
-                // check if the position of the navbar is the current file
+                // Checks if the position of the navbar is the current file.
                 child: showFilename(file.name, model.position == index),
                 onTap: () {
                   model.changeIndexTo(index);
