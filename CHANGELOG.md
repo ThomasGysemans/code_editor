@@ -1,3 +1,7 @@
+## [0.1.3] - Aug 7, 2020
+
+The CodeEditor Widget doesn't have margin property anymore.
+
 ## [0.1.2] - Aug 6, 2020
 
 onSubmit parameter is not required anynome inside the CodeEditor Widget.
@@ -5,6 +9,8 @@ onSubmit parameter is not required anynome inside the CodeEditor Widget.
 + A new parameter : bool edit, by default its value is true. Set it to false if you want to disable file editing. Use it inside the CodeEditor Widget.
 
 + New parameter inside EditorModelStyleOptions : double fontSizeOfFilename, the font size of the files' names.
+
++ The documentation in the source code is much better !
 
 ## [0.1.1] - Aug 1, 2020
 

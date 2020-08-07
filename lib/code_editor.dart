@@ -53,21 +53,18 @@ class CodeEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => model,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 50),
-        child: Column(
-          children: <Widget>[
-            _NavBarFiles(),
-            _ContentEditor(
-              // we have to pass a initalCode because we must initialize
-              // the inital text of the text field in initState()
-              // through the controller
-              initialCode: model.getCodeWithIndex(0),
-              onSubmit: this.onSubmit ?? (String language, String value) {},
-              edit: edit,
-            ),
-          ],
-        ),
+      child: Column(
+        children: <Widget>[
+          _NavBarFiles(),
+          _ContentEditor(
+            // we have to pass a initalCode because we must initialize
+            // the inital text of the text field in initState()
+            // through the controller
+            initialCode: model.getCodeWithIndex(0),
+            onSubmit: this.onSubmit ?? (String language, String value) {},
+            edit: edit,
+          ),
+        ],
       ),
     );
   }
