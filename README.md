@@ -21,7 +21,7 @@ It's very easy to install :
 
 ```
 dependencies:
-  code_editor: ^0.1.2
+  code_editor: ^0.1.3
 ```
 
 * Don't forget to update the modifications of the pubspec.yaml file
