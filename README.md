@@ -21,7 +21,7 @@ It's very easy to install :
 
 ```
 dependencies:
-  code_editor: ^0.1.3
+  code_editor: ^0.2.0
 ```
 
 * Don't forget to update the modifications of the pubspec.yaml file
@@ -117,6 +117,7 @@ class EditorModelStyleOptions {
   final Color editorFilenameColor;
   final Color editorToolButtonColor;
   final Color editorToolButtonTextColor;
+  final TextStyle textStyleOfTextField;
 }
 ```
 
@@ -154,6 +155,12 @@ editorBorderColor: Color(0xFF3E416E), // the color of the borders between elemen
 editorFilenameColor: Color(0xFF6CD07A), // the color of the file's name
 editorToolButtonColor:  Color(0xFF4650c7), // the tool's buttons
 editorToolButtonTextColor: Colors.white
+textStyleOfTextField: TextStyle(
+  color: Colors.black87,
+  fontSize: 16,
+  letterSpacing: 1.25,
+  fontWeight: FontWeight.w500,
+),
 
 // with defineEditButtonProperties()
 editButtonTextColor: Colors.black,

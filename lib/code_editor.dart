@@ -127,36 +127,6 @@ class __ContentEditorState extends State<_ContentEditor> {
     }
   }
 
-  /// Creates the text field.
-  SingleChildScrollView buildEditableText() {
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.only(
-          right: 10,
-          left: 10,
-          top: 10,
-          bottom: 50,
-        ),
-        child: EditableText(
-          autofocus: true,
-          maxLines: null,
-          backgroundCursorColor: Colors.amber,
-          cursorColor: Colors.green,
-          style: TextStyle(
-            color: Colors.black87,
-            fontSize: 16,
-            letterSpacing: 1.25,
-            fontWeight: FontWeight.w500,
-          ),
-          focusNode: focusNode,
-          controller: editingController,
-          onChanged: (String v) => newValue = v,
-          key: editableTextKey,
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     EditorModel model = context.watch<EditorModel>();
@@ -173,6 +143,31 @@ class __ContentEditorState extends State<_ContentEditor> {
     newValue = code;
 
     EditorModelStyleOptions opt = model.styleOptions;
+
+    /// Creates the text field.
+    SingleChildScrollView buildEditableText() {
+      return SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(
+            right: 10,
+            left: 10,
+            top: 10,
+            bottom: 50,
+          ),
+          child: EditableText(
+            autofocus: true,
+            maxLines: null,
+            backgroundCursorColor: Colors.amber,
+            cursorColor: Colors.green,
+            style: opt.textStyleOfTextField,
+            focusNode: focusNode,
+            controller: editingController,
+            onChanged: (String v) => newValue = v,
+            key: editableTextKey,
+          ),
+        ),
+      );
+    }
 
     /// Creates the edit button and the save button ("OK") with a
     /// particual function [press] to execute.
@@ -367,24 +362,26 @@ class __ContentEditorState extends State<_ContentEditor> {
                 width: double.infinity,
                 height: opt.heightOfContainer,
                 color: opt.editorColor,
-                padding: opt.padding,
                 child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      HighlightView(
-                        code,
-                        language: language,
-                        theme: opt.theme,
-                        tabSize: opt.tabSize,
-                        textStyle: TextStyle(
-                          fontFamily: opt.fontFamily,
-                          letterSpacing: opt.letterSpacing,
-                          fontSize: opt.fontSize,
-                          height: opt.lineHeight, // line-height
+                  child: Padding(
+                    padding: opt.padding,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        HighlightView(
+                          code,
+                          language: language,
+                          theme: opt.theme,
+                          tabSize: opt.tabSize,
+                          textStyle: TextStyle(
+                            fontFamily: opt.fontFamily,
+                            letterSpacing: opt.letterSpacing,
+                            fontSize: opt.fontSize,
+                            height: opt.lineHeight, // line-height
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

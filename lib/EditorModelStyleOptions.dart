@@ -62,6 +62,17 @@ class EditorModelStyleOptions {
   /// Set the font size of the file's name in the navigation bar.
   final double fontSizeOfFilename;
 
+  /// Set the textStyle of the text field. By default :
+  /// ```
+  /// TextStyle(
+  ///   color: Colors.black87,
+  ///   fontSize: 16,
+  ///   letterSpacing: 1.25,
+  ///   fontWeight: FontWeight.w500,
+  /// )
+  /// ```
+  final TextStyle textStyleOfTextField;
+
   static const Color defaultColorEditor = Color(0xff2E3152);
   static const Color defaultColorBorder = Color(0xFF3E416E);
   static const Color defaultColorFileName = Color(0xFF6CD07A);
@@ -82,6 +93,12 @@ class EditorModelStyleOptions {
     this.editorToolButtonColor = defaultToolButtonColor,
     this.editorToolButtonTextColor = Colors.white,
     this.fontSizeOfFilename,
+    this.textStyleOfTextField = const TextStyle(
+      color: Colors.black87,
+      fontSize: 16,
+      letterSpacing: 1.25,
+      fontWeight: FontWeight.w500,
+    ),
   });
 
   Color editButtonColor;

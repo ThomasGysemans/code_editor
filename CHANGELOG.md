@@ -1,3 +1,11 @@
+## [0.2.0] - Aug 7, 2020
+
+From now on, when the code overflows the editor, the scroll is better.
+
++ New parameter inside EditorModelStyleOptions : TextStyle textStyleOfTextField, the style of the text inside the text field.
+
+code_editor is much better since its initial release :)
+
 ## [0.1.3] - Aug 7, 2020
 
 The CodeEditor Widget doesn't have margin property anymore.
