@@ -1,7 +1,11 @@
+## [1.0.1] - Aug 10, 2020
+
+Fix typo.
+
 ## [1.0.0] - Aug 10, 2020
 
 This is a big version !
-He are all the updates : 
+Here are all the updates : 
 
 + There was a bug before : you could'nt change the content of a file outside the CodeEditor Widget, I mean in a SetState() function. Now, it's possible.
 
