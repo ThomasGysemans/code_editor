@@ -50,7 +50,7 @@ class MyEditor extends StatelessWidget {
     ];
 
     EditorModel model = new EditorModel(
-      files,
+      files: files,
       styleOptions: new EditorModelStyleOptions(
         fontSize: 13,
       ),

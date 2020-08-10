@@ -1,3 +1,22 @@
+## [1.0.0] - Aug 10, 2020
+
+This is a big version !
+He are all the updates : 
+
++ There was a bug before : you could'nt change the content of a file outside the CodeEditor Widget, I mean in a SetState() function. Now, it's possible.
+
++ You can choose to disable the navigation bar with the new parameter : disableNavigationbar (by default set to false). If you hide the navigation bar, only the first file will be displayed.
+
++ WARNING : if you move your project to this version, you will need to modify a little thing : EditorModel has no positional arguments anymore, so to define your files, you will have to name the parameter to "files". Check the Readme section.
+
++ Now, there is no required parameters anymore. Everything has a default value to bring more flexibility to developers. Check the Readme section for more info.
+
++ code_editor does not use Provider package anymore.
+
++ The Readme section is more readable and more accurate.
+
+Enjoy Coding !
+
 ## [0.2.0] - Aug 7, 2020
 
 From now on, when the code overflows the editor, the scroll is better.

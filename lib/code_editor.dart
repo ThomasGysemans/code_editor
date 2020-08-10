@@ -3,12 +3,11 @@ library code_editor;
 import 'package:flutter/material.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
 
-import 'TextUtils.dart';
 import 'ToolButton.dart';
 
 part 'EditorModel.dart';
+part 'FileEditor.dart';
 part 'EditorModelStyleOptions.dart';
 part 'Theme.dart';
 
@@ -17,7 +16,7 @@ part 'Theme.dart';
 /// In order to use it, you must define :
 /// * [model] an EditorModel, to control the editor, its content and its files
 /// * [onSubmit] a Function(String language, String value) executed when the user submits changes in a file.
-class CodeEditor extends StatelessWidget {
+class CodeEditor extends StatefulWidget {
   /// The EditorModel in order to control the editor.
   ///
   /// This argument is @required.
@@ -42,53 +41,45 @@ class CodeEditor extends StatelessWidget {
   /// By default, the value is true.
   final bool edit;
 
+  /// You can disable the navigation bar like this :
+  ///
+  /// ```
+  /// CodeEditor(
+  ///   model: model, // my EditorModel()
+  ///   disableNavigationbar: true, // hide the navigation bar
+  /// )
+  /// ```
+  ///
+  /// By default, the value is `false`.
+  ///
+  /// WARNING : if you set the value to true, only the first
+  /// file will be displayed in the editor because
+  /// it's not possible to switch betweens other files without the navigation bar.
+  final bool disableNavigationbar;
+
   CodeEditor({
     Key key,
-    @required this.model,
+    this.model,
     this.onSubmit,
     this.edit = true,
+    this.disableNavigationbar = false,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => model,
-      child: Column(
-        children: <Widget>[
-          _NavBarFiles(),
-          _ContentEditor(
-            // we have to pass a initalCode because we must initialize
-            // the inital text of the text field in initState()
-            // through the controller
-            initialCode: model.getCodeWithIndex(0),
-            onSubmit: this.onSubmit ?? (String language, String value) {},
-            edit: edit,
-          ),
-        ],
-      ),
-    );
-  }
+  _CodeEditorState createState() => _CodeEditorState();
 }
 
-class _ContentEditor extends StatefulWidget {
-  final String initialCode;
-  final Function onSubmit;
-  final bool edit;
-  _ContentEditor({
-    Key key,
-    @required this.initialCode,
-    @required this.onSubmit,
-    @required this.edit,
-  }) : super(key: key);
-
-  @override
-  __ContentEditorState createState() => __ContentEditorState();
-}
-
-class __ContentEditorState extends State<_ContentEditor> {
+class _CodeEditorState extends State<CodeEditor> {
+  /// Creates the unique key of the text field.
   GlobalKey editableTextKey = GlobalKey();
+
+  /// We need it to control the content of the text field.
   TextEditingController editingController;
+
+  /// The new content of a file when the user is editing one.
   String newValue;
+
+  /// The text field wants a focus node.
   FocusNode focusNode = FocusNode();
 
   @override
@@ -96,8 +87,8 @@ class __ContentEditorState extends State<_ContentEditor> {
     super.initState();
 
     /// Initialize the controller for the text field.
-    editingController = TextEditingController(text: widget.initialCode);
-    newValue = widget.initialCode; // if there are no changes
+    editingController = TextEditingController(text: "");
+    newValue = ""; // if there are no changes
   }
 
   @override
@@ -122,17 +113,31 @@ class __ContentEditorState extends State<_ContentEditor> {
         TextPosition(offset: pos),
       );
     } catch (e) {
-      throw Exception(
-          "code_editor package : placeCursor(int pos), pos is not valid.");
+      throw Exception("code_editor : placeCursor(int pos), pos is not valid.");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    EditorModel model = context.watch<EditorModel>();
+    /// Gets the model from the parent widget.
+    EditorModel model = widget.model;
+
+    if (model == null) {
+      model = new EditorModel(files: []);
+    }
+
+    /// Gets the style options from the parent widget.
+    EditorModelStyleOptions opt = model.styleOptions;
+
     String language = model.currentLanguage;
+
+    /// Wich file in the list of file ?
     int position = model.position;
+
+    /// The content of the file where position corresponds to the list of file.
     String code = model.getCodeWithIndex(position);
+
+    bool disableNavigationbar = widget.disableNavigationbar;
 
     // When we change the file in the navbar, the code in the text field
     // isn't updated, so we update it here.
@@ -142,7 +147,56 @@ class __ContentEditorState extends State<_ContentEditor> {
     editingController = TextEditingController(text: code);
     newValue = code;
 
-    EditorModelStyleOptions opt = model.styleOptions;
+    /// The filename in green.
+    Text showFilename(String name, bool isSelected) {
+      return Text(
+        name,
+        style: TextStyle(
+          fontFamily: "monospace",
+          letterSpacing: 1.0,
+          fontWeight: FontWeight.normal,
+          fontSize: opt.fontSizeOfFilename,
+          color: isSelected
+              ? opt.editorFilenameColor
+              : opt.editorFilenameColor.withOpacity(0.5),
+        ),
+      );
+    }
+
+    /// Build the navigation bar.
+    Container buildNavbar() {
+      return Container(
+        width: double.infinity,
+        height: 60,
+        decoration: BoxDecoration(
+          color: opt.editorColor,
+          border: Border(bottom: BorderSide(color: opt.editorBorderColor)),
+        ),
+        child: ListView.builder(
+          padding: EdgeInsets.only(left: 15),
+          itemCount: model.numberOfFiles,
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, int index) {
+            final FileEditor file = model.getFileWithIndex(index);
+
+            return Container(
+              margin: EdgeInsets.only(right: 15),
+              child: Center(
+                child: GestureDetector(
+                  // Checks if the position of the navbar is the current file.
+                  child: showFilename(file.name, model.position == index),
+                  onTap: () {
+                    setState(() {
+                      model.changeIndexTo(index);
+                    });
+                  },
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    }
 
     /// Creates the text field.
     SingleChildScrollView buildEditableText() {
@@ -183,9 +237,14 @@ class __ContentEditorState extends State<_ContentEditor> {
           child: RaisedButton(
             onPressed: press,
             color: opt.editButtonColor,
-            child: TextUtils(
+            child: Text(
               name,
-              color: opt.editButtonTextColor,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontFamily: "monospace",
+                fontWeight: FontWeight.normal,
+                color: opt.editButtonTextColor,
+              ),
             ),
           ),
         );
@@ -300,12 +359,14 @@ class __ContentEditorState extends State<_ContentEditor> {
                 color: opt.editorToolButtonColor,
                 onPressed: btn.press,
                 child: btn.icon == null
-                    ? TextUtils(
+                    ? Text(
                         btn.symbol,
-                        color: opt.editorToolButtonTextColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "monospace",
+                        style: TextStyle(
+                          color: opt.editorToolButtonTextColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "monospace",
+                        ),
                       )
                     : FaIcon(
                         btn.icon,
@@ -324,120 +385,86 @@ class __ContentEditorState extends State<_ContentEditor> {
       placeCursorAtTheEnd();
     }
 
-    // We toggle the editor and the text field.
-    return model.isEditing
-        ? Stack(
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  // the toolbar
-                  toolBar(),
-                  // Container of the EditableText
-                  Container(
-                    width: double.infinity,
-                    height: opt.heightOfContainer,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                        bottom: BorderSide(
-                          color: opt.editorBorderColor.withOpacity(0.4),
-                        ),
-                      ),
-                    ),
-                    child: buildEditableText(),
-                  ),
-                ],
-              ),
-              // The OK button
-              editButton("OK", () {
-                model.updateCodeOfIndex(position, newValue);
-                model.toggleEditing();
-                widget.onSubmit(language, newValue);
-              }),
-            ],
-          )
-        : Stack(
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                height: opt.heightOfContainer,
-                color: opt.editorColor,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: opt.padding,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        HighlightView(
-                          code,
-                          language: language,
-                          theme: opt.theme,
-                          tabSize: opt.tabSize,
-                          textStyle: TextStyle(
-                            fontFamily: opt.fontFamily,
-                            letterSpacing: opt.letterSpacing,
-                            fontSize: opt.fontSize,
-                            height: opt.lineHeight, // line-height
+    /// We toggle the editor and the text field.
+    Widget buildContentEditor() {
+      return model.isEditing
+          ? Stack(
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    // the toolbar
+                    toolBar(),
+                    // Container of the EditableText
+                    Container(
+                      width: double.infinity,
+                      height: opt.heightOfContainer,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                          bottom: BorderSide(
+                            color: opt.editorBorderColor.withOpacity(0.4),
                           ),
                         ),
-                      ],
+                      ),
+                      child: buildEditableText(),
+                    ),
+                  ],
+                ),
+                // The OK button
+                editButton("OK", () {
+                  setState(() {
+                    model.updateCodeOfIndex(position, newValue);
+                    model.toggleEditing();
+                    if (widget.onSubmit != null) {
+                      widget.onSubmit(language, newValue);
+                    }
+                  });
+                }),
+              ],
+            )
+          : Stack(
+              children: <Widget>[
+                Container(
+                  width: double.infinity,
+                  height: opt.heightOfContainer,
+                  color: opt.editorColor,
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: opt.padding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          HighlightView(
+                            code ?? "code is null",
+                            language: language,
+                            theme: opt.theme,
+                            tabSize: opt.tabSize,
+                            textStyle: TextStyle(
+                              fontFamily: opt.fontFamily,
+                              letterSpacing: opt.letterSpacing,
+                              fontSize: opt.fontSize,
+                              height: opt.lineHeight, // line-height
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              editButton(opt.editButtonName, () {
-                model.toggleEditing();
-              }),
-            ],
-          );
-  }
-}
-
-class _NavBarFiles extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    EditorModel model = context.watch<EditorModel>();
-    EditorModelStyleOptions opt = model.styleOptions;
-
-    /// The filename in green.
-    TextUtils showFilename(String name, bool isSelected) {
-      return TextUtils(
-        name,
-        fontSize: opt.fontSizeOfFilename,
-        color: isSelected
-            ? opt.editorFilenameColor
-            : opt.editorFilenameColor.withOpacity(0.5),
-      );
+                editButton(opt.editButtonName, () {
+                  setState(() {
+                    model.toggleEditing();
+                  });
+                }),
+              ],
+            );
     }
 
-    return Container(
-      width: double.infinity,
-      height: 60,
-      decoration: BoxDecoration(
-        color: opt.editorColor,
-        border: Border(bottom: BorderSide(color: opt.editorBorderColor)),
-      ),
-      child: ListView.builder(
-        padding: EdgeInsets.only(left: 15),
-        itemCount: model.numberOfFiles,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, int index) {
-          final FileEditor file = model.getFileWithIndex(index);
-
-          return Container(
-            margin: EdgeInsets.only(right: 15),
-            child: Center(
-              child: GestureDetector(
-                // Checks if the position of the navbar is the current file.
-                child: showFilename(file.name, model.position == index),
-                onTap: () {
-                  model.changeIndexTo(index);
-                },
-              ),
-            ),
-          );
-        },
-      ),
+    return Column(
+      children: <Widget>[
+        disableNavigationbar ? SizedBox.shrink() : buildNavbar(),
+        buildContentEditor(),
+      ],
     );
   }
 }

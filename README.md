@@ -21,7 +21,7 @@ It's very easy to install :
 
 ```
 dependencies:
-  code_editor: ^0.2.0
+  code_editor: ^1.0.0
 ```
 
 * Don't forget to update the modifications of the pubspec.yaml file
@@ -54,9 +54,9 @@ class HomePage extends StatelessWidget {
       "</html>",
     ];
 
-    // the files displayed in the navigation bar of the editor
-    // you are not limited
-    // name and language are @required, by default code = ""
+    // The files displayed in the navigation bar of the editor.
+    // You are not limited.
+    // By default, [name] = "file.${language ?? 'txt'}", [language] = "text" and [code] = "",
     List<FileEditor> files = [
       new FileEditor(
         name: "page1.html",
@@ -75,9 +75,10 @@ class HomePage extends StatelessWidget {
       ),
     ];
     
-    // the model used by the CodeEditor widget, you need it in order to control it
+    // The model used by the CodeEditor widget, you need it in order to control it.
+    // But, since 1.0.0, the model is not required inside the CodeEditor Widget.
     EditorModel model = new EditorModel(
-      files,
+      files: files, // the files created above
       // you can customize the editor as you want
       styleOptions: new EditorModelStyleOptions(
         fontSize: 13,
@@ -89,7 +90,9 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView( // /!\ important because of the telephone keypad which causes a "RenderFlex overflowed by x pixels on the bottom" error
         // display the CodeEditor widget
         CodeEditor(
-          model: model, // the model created above
+          model: model, // the model created above, not required since 1.0.0
+          edit: false, // can edit the files ? by default true
+          disableNavigationbar: false, // hide the navigation bar ? by default false
           onSubmit: (String language, String value) {}, // when the user confirms changes in one of the files
         ),
       ),
@@ -179,8 +182,7 @@ For the moment, I haven't been able to fix a slight bug that occurs when there i
 
 code_editor uses the following dependencies to work :
 1. flutter_highlight
-2. provider
-3. font_awesome_flutter
+2. font_awesome_flutter
 
 ## Contributing
 
