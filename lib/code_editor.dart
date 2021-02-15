@@ -208,11 +208,11 @@ class _CodeEditorState extends State<CodeEditor> {
             top: 10,
             bottom: 50,
           ),
-          child: EditableText(
+          child: TextField(
+            decoration: InputDecoration(border: InputBorder.none),
             autofocus: true,
+            keyboardType: TextInputType.multiline,
             maxLines: null,
-            backgroundCursorColor: Colors.amber,
-            cursorColor: Colors.green,
             style: opt.textStyleOfTextField,
             focusNode: focusNode,
             controller: editingController,
