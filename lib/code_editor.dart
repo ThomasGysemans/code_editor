@@ -218,6 +218,7 @@ class _CodeEditorState extends State<CodeEditor> {
             controller: editingController,
             onChanged: (String v) => newValue = v,
             key: editableTextKey,
+            toolbarOptions: model.styleOptions.toolbarOptions,
           ),
         ),
       );
@@ -381,7 +382,7 @@ class _CodeEditorState extends State<CodeEditor> {
     }
 
     // We place the cursor in the end of the text field.
-    if (model.isEditing) {
+    if (model.isEditing && model.styleOptions.placeCursorAtTheEndOnEdit) {
       placeCursorAtTheEnd();
     }
 

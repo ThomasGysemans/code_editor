@@ -73,33 +73,37 @@ class EditorModelStyleOptions {
   /// ```
   final TextStyle textStyleOfTextField;
 
+  final ToolbarOptions toolbarOptions;
+  final bool placeCursorAtTheEndOnEdit;
+
   static const Color defaultColorEditor = Color(0xff2E3152);
   static const Color defaultColorBorder = Color(0xFF3E416E);
   static const Color defaultColorFileName = Color(0xFF6CD07A);
   static const Color defaultToolButtonColor = Color(0xFF4650c7);
 
-  EditorModelStyleOptions({
-    this.padding = const EdgeInsets.all(15.0),
-    this.heightOfContainer = 300,
-    this.theme = myTheme,
-    this.fontFamily = "monospace",
-    this.letterSpacing,
-    this.fontSize = 15,
-    this.lineHeight = 1.6,
-    this.tabSize = 2,
-    this.editorColor = defaultColorEditor,
-    this.editorBorderColor = defaultColorBorder,
-    this.editorFilenameColor = defaultColorFileName,
-    this.editorToolButtonColor = defaultToolButtonColor,
-    this.editorToolButtonTextColor = Colors.white,
-    this.fontSizeOfFilename,
-    this.textStyleOfTextField = const TextStyle(
-      color: Colors.black87,
-      fontSize: 16,
-      letterSpacing: 1.25,
-      fontWeight: FontWeight.w500,
-    ),
-  });
+  EditorModelStyleOptions(
+      {this.padding = const EdgeInsets.all(15.0),
+      this.heightOfContainer = 300,
+      this.theme = myTheme,
+      this.fontFamily = "monospace",
+      this.letterSpacing,
+      this.fontSize = 15,
+      this.lineHeight = 1.6,
+      this.tabSize = 2,
+      this.editorColor = defaultColorEditor,
+      this.editorBorderColor = defaultColorBorder,
+      this.editorFilenameColor = defaultColorFileName,
+      this.editorToolButtonColor = defaultToolButtonColor,
+      this.editorToolButtonTextColor = Colors.white,
+      this.fontSizeOfFilename,
+      this.textStyleOfTextField = const TextStyle(
+        color: Colors.black87,
+        fontSize: 16,
+        letterSpacing: 1.25,
+        fontWeight: FontWeight.w500,
+      ),
+      this.toolbarOptions = const ToolbarOptions(),
+      this.placeCursorAtTheEndOnEdit = true});
 
   Color editButtonColor;
   Color editButtonTextColor = Colors.black;
