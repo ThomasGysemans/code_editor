@@ -1,3 +1,11 @@
+## [1.1.0] - April 24, 2021
+
++ Bug fixes.
++ Fix typo.
++ Better compatibility with the latest version of Flutter (the deprecated widgets have been removed).
++ Reorganisation of `EditorModelStyleOptions.dart`.
++ Updates the dependencies to their latest version.
+
 ## [1.0.1] - Aug 10, 2020
 
 Fix typo.

@@ -131,7 +131,7 @@ class _CodeEditorState extends State<CodeEditor> {
 
     String language = model.currentLanguage;
 
-    /// Wich file in the list of file ?
+    /// Which file in the list of file ?
     int position = model.position;
 
     /// The content of the file where position corresponds to the list of file.
@@ -235,9 +235,11 @@ class _CodeEditorState extends State<CodeEditor> {
           right: opt.editButtonPosRight,
           top: opt.editButtonPosTop,
           left: opt.editButtonPosLeft,
-          child: RaisedButton(
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: opt.editButtonBackgroundColor,
+            ),
             onPressed: press,
-            color: opt.editButtonColor,
             child: Text(
               name,
               style: TextStyle(
@@ -356,8 +358,10 @@ class _CodeEditorState extends State<CodeEditor> {
             return Container(
               width: 55,
               margin: EdgeInsets.only(right: 15), // == padding right above
-              child: FlatButton(
-                color: opt.editorToolButtonColor,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: opt.editorToolButtonColor,
+                ),
                 onPressed: btn.press,
                 child: btn.icon == null
                     ? Text(

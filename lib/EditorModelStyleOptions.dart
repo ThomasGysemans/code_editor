@@ -1,9 +1,7 @@
 part of code_editor;
 
 /// Set the style of CodeEditor.
-///
 /// You have to use it in EditorModel() just like this :
-///
 /// ```
 /// EditorModel model = new EditorModel(
 ///   files, // My files...
@@ -12,7 +10,6 @@ part of code_editor;
 ///   ),
 /// );
 /// ```
-///
 /// An EditorModel instance has the default values of EditorModelStyleOptions.
 class EditorModelStyleOptions {
   /// Set the padding of the file's content. By default `15.0`.
@@ -22,9 +19,7 @@ class EditorModelStyleOptions {
   final double heightOfContainer;
 
   /// Set the theme of the syntax. code_editor has its own theme.
-  ///
   /// You can create your own or use others themes by looking at :
-  ///
   /// `import 'package:flutter_highlight/themes/'`.
   final Map<String, TextStyle> theme;
 
@@ -73,6 +68,18 @@ class EditorModelStyleOptions {
   /// ```
   final TextStyle textStyleOfTextField;
 
+  /// The background color of the button "Edit".
+  /// By default `Color(0xFFEEEEEE)`.
+  final Color editButtonBackgroundColor;
+
+  /// The text color fo the button "Edit".
+  /// By default `Colors.black`.
+  final Color editButtonTextColor;
+
+  /// The name of the "Edit" button.
+  /// By default `Edit`.
+  final String editButtonName;
+
   final ToolbarOptions toolbarOptions;
   final bool placeCursorAtTheEndOnEdit;
 
@@ -80,59 +87,43 @@ class EditorModelStyleOptions {
   static const Color defaultColorBorder = Color(0xFF3E416E);
   static const Color defaultColorFileName = Color(0xFF6CD07A);
   static const Color defaultToolButtonColor = Color(0xFF4650c7);
+  static const Color defaultEditBackgroundColor = Color(0xFFEEEEEE);
 
-  EditorModelStyleOptions(
-      {this.padding = const EdgeInsets.all(15.0),
-      this.heightOfContainer = 300,
-      this.theme = myTheme,
-      this.fontFamily = "monospace",
-      this.letterSpacing,
-      this.fontSize = 15,
-      this.lineHeight = 1.6,
-      this.tabSize = 2,
-      this.editorColor = defaultColorEditor,
-      this.editorBorderColor = defaultColorBorder,
-      this.editorFilenameColor = defaultColorFileName,
-      this.editorToolButtonColor = defaultToolButtonColor,
-      this.editorToolButtonTextColor = Colors.white,
-      this.fontSizeOfFilename,
-      this.textStyleOfTextField = const TextStyle(
-        color: Colors.black87,
-        fontSize: 16,
-        letterSpacing: 1.25,
-        fontWeight: FontWeight.w500,
-      ),
-      this.toolbarOptions = const ToolbarOptions(),
-      this.placeCursorAtTheEndOnEdit = true});
-
-  Color editButtonColor;
-  Color editButtonTextColor = Colors.black;
-  String editButtonName = "Edit";
-
-  /// Define the styles of the edit button.
-  ///
-  /// By default the text inside the button is `"Edit"`.
-  ///
-  /// And the default color of the text is `Colors.black`.
-  void defineEditButtonProperties({
-    color,
-    textColor,
-    text,
-  }) {
-    this.editButtonColor = color;
-    this.editButtonTextColor = textColor;
-    this.editButtonName = text ?? editButtonName;
-  }
+  EditorModelStyleOptions({
+    this.padding = const EdgeInsets.all(15.0),
+    this.heightOfContainer = 300,
+    this.theme = myTheme,
+    this.fontFamily = "monospace",
+    this.letterSpacing,
+    this.fontSize = 15,
+    this.lineHeight = 1.6,
+    this.tabSize = 2,
+    this.editorColor = defaultColorEditor,
+    this.editorBorderColor = defaultColorBorder,
+    this.editorFilenameColor = defaultColorFileName,
+    this.editorToolButtonColor = defaultToolButtonColor,
+    this.editorToolButtonTextColor = Colors.white,
+    this.editButtonBackgroundColor = defaultEditBackgroundColor,
+    this.editButtonTextColor = Colors.black,
+    this.editButtonName = "Edit",
+    this.fontSizeOfFilename,
+    this.textStyleOfTextField = const TextStyle(
+      color: Colors.black87,
+      fontSize: 16,
+      letterSpacing: 1.25,
+      fontWeight: FontWeight.w500,
+    ),
+    this.toolbarOptions = const ToolbarOptions(),
+    this.placeCursorAtTheEndOnEdit = true
+  });
 
   double editButtonPosTop; // minimum of 50 because of the toolbar
   double editButtonPosLeft;
   double editButtonPosBottom = 10;
   double editButtonPosRight = 15;
 
-  /// You can change the position of the button "Edit" or "OK".
-  ///
+  /// You can change the position of the button "Edit" / "OK".
   /// By default, `bottom: 10`, `right: 15`.
-  ///
   /// Minimum of [top] is 50, `if top < 50 => top = 50` automatically
   /// because of the navigation bar height.
   void defineEditButtonPosition({

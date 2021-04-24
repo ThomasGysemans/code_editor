@@ -6,7 +6,7 @@ A code editor (dart, js, html, ...) for Flutter with syntax highlighting and cus
 
 The editor displays the contents of fictitious "files" that correspond to a FileEditor, each file has properties such as its name (index.html), its content and the language this file uses.
 
-In other words, with this code editor, you can edit files, wich contain code. You can switch between the files in the navigation bar to edit their content with tools that make writing easier. Once editing is complete, the code is highlighted according to the imposed theme (by default a custom one).
+In other words, with this code editor, you can edit files which contain code. You can switch between the files in the navigation bar to edit their content with tools that make writing easier. Once editing is complete, the code is highlighted according to the imposed theme (by default a custom one).
 You can choose your theme or create your own by checking at "import 'package:flutter_highlight/themes/github.dart';"
 
 ![example-1](https://learnweb.sciencesky.fr/code_editor_example-1.png)
@@ -19,9 +19,9 @@ It's very easy to install :
 
 * Add in the pubspec.yaml file
 
-```
+```yaml
 dependencies:
-  code_editor: ^1.0.0
+  code_editor: ^1.1.0
 ```
 
 * Don't forget to update the modifications of the pubspec.yaml file
@@ -32,7 +32,7 @@ $ flutter pub get
 
 * Finally, use code_editor in your flutter project
 
-```
+```dart
 import 'package:code_editor/code_editor.dart';
 ```
 
@@ -40,7 +40,7 @@ import 'package:code_editor/code_editor.dart';
 
 After importing the package into your project, you can initiliaze an EditorModel to control the editor :
 
-```
+```dart
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -103,7 +103,7 @@ class HomePage extends StatelessWidget {
 
 For the style options, you have a lot of possibilites : 
 
-```
+```dart
 // the class, to show you what you can change
 class EditorModelStyleOptions {
   final EdgeInsets padding;
@@ -114,26 +114,24 @@ class EditorModelStyleOptions {
   final double fontSize;
   final double lineHeight;
   final int tabSize;
-  final double fontSizeOfFilename;
   final Color editorColor;
   final Color editorBorderColor;
   final Color editorFilenameColor;
   final Color editorToolButtonColor;
   final Color editorToolButtonTextColor;
+  final Color editButtonBackgroundColor;
+  final Color editButtonTextColor;
+  final String editButtonName;
+  final double fontSizeOfFilename;
   final TextStyle textStyleOfTextField;
+  final ToolbarOptions toolbarOptions;
+  final bool placeCursorAtTheEndOnEdit;
 }
 ```
 
-In order to modify the edit button, use :
+Change the position of the edit button ("Edit") with :
 
-```
-// into EditorModelStyleOptions : 
-(void) defineEditButtonProperties(color: Colors.red, textColor: Colors.white, text: "Edit")
-```
-
-You can also change the position of the edit button
-
-```
+```dart
 // into EditorModelStyleOptions :
 (void) defineEditButtonPosition(bottom: 10, right: 15) // default values
 
@@ -144,39 +142,37 @@ You can also change the position of the edit button
 
 The default values of EditorModelStyleOptions are :
 
-```
+```dart
 padding = const EdgeInsets.all(15.0),
 heightOfContainer = 300,
-theme: myTheme, // the custom theme
-fontFamily: "monospace", // "Poppins" is a good font family too
-fontSize: 15,
-lineHeight: 1.6,
-tabSize: 2, // do not use a to high number
-fontSizeOfFilename: null,
-editorColor: Color(0xff2E3152),
-editorBorderColor: Color(0xFF3E416E), // the color of the borders between elements in the editor
-editorFilenameColor: Color(0xFF6CD07A), // the color of the file's name
-editorToolButtonColor:  Color(0xFF4650c7), // the tool's buttons
-editorToolButtonTextColor: Colors.white
-textStyleOfTextField: TextStyle(
+theme = myTheme, // the custom Theme
+fontFamily = "monospace",
+letterSpacing,
+fontSize = 15,
+lineHeight = 1.6,
+tabSize = 2, // do not use a to high number
+editorColor = defaultColorEditor, // Color(0xff2E3152)
+editorBorderColor = defaultColorBorder, // Color(0xFF3E416E), the color of the borders between elements in the editor
+editorFilenameColor = defaultColorFileName, // Color(0xFF6CD07A) the color of the file's name
+editorToolButtonColor = defaultToolButtonColor, // Color(0xFF4650c7) the tool's buttons
+editorToolButtonTextColor = Colors.white,
+editButtonBackgroundColor = defaultEditBackgroundColor, // Color(0xFFEEEEEE)
+editButtonTextColor = Colors.black,
+editButtonName = "Edit",
+fontSizeOfFilename,
+textStyleOfTextField = const TextStyle(
   color: Colors.black87,
   fontSize: 16,
   letterSpacing: 1.25,
   fontWeight: FontWeight.w500,
 ),
-
-// with defineEditButtonProperties()
-editButtonTextColor: Colors.black,
-editButtonName: "Edit"
+toolbarOptions = const ToolbarOptions(),
+placeCursorAtTheEndOnEdit = true
 
 // with defineEditButtonPosition()
 editButtonPosBottom: 10,
 editButtonPosRight: 15
 ```
-
-## Notable issue
-
-For the moment, I haven't been able to fix a slight bug that occurs when there is a lot of code. Indeed, when the code goes out of the text field, and the user clicks on it to be able to write in it, he can't go all the way down because of the phone keyboard.
 
 ## Internal dependencies
 
