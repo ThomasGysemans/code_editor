@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   
-  flutter_highlight: ^0.6.0
+  flutter_highlight: ^0.7.0
   font_awesome_flutter: ^8.8.1
 
 dev_dependencies:
