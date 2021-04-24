@@ -1,3 +1,8 @@
+## [1.1.1] - April 24, 2021
+
++ dartfmt
++ See [https://dart.dev/tools/dart-format]
+
 ## [1.1.0] - April 24, 2021
 
 + Bug fixes.

@@ -89,33 +89,32 @@ class EditorModelStyleOptions {
   static const Color defaultToolButtonColor = Color(0xFF4650c7);
   static const Color defaultEditBackgroundColor = Color(0xFFEEEEEE);
 
-  EditorModelStyleOptions({
-    this.padding = const EdgeInsets.all(15.0),
-    this.heightOfContainer = 300,
-    this.theme = myTheme,
-    this.fontFamily = "monospace",
-    this.letterSpacing,
-    this.fontSize = 15,
-    this.lineHeight = 1.6,
-    this.tabSize = 2,
-    this.editorColor = defaultColorEditor,
-    this.editorBorderColor = defaultColorBorder,
-    this.editorFilenameColor = defaultColorFileName,
-    this.editorToolButtonColor = defaultToolButtonColor,
-    this.editorToolButtonTextColor = Colors.white,
-    this.editButtonBackgroundColor = defaultEditBackgroundColor,
-    this.editButtonTextColor = Colors.black,
-    this.editButtonName = "Edit",
-    this.fontSizeOfFilename,
-    this.textStyleOfTextField = const TextStyle(
-      color: Colors.black87,
-      fontSize: 16,
-      letterSpacing: 1.25,
-      fontWeight: FontWeight.w500,
-    ),
-    this.toolbarOptions = const ToolbarOptions(),
-    this.placeCursorAtTheEndOnEdit = true
-  });
+  EditorModelStyleOptions(
+      {this.padding = const EdgeInsets.all(15.0),
+      this.heightOfContainer = 300,
+      this.theme = myTheme,
+      this.fontFamily = "monospace",
+      this.letterSpacing,
+      this.fontSize = 15,
+      this.lineHeight = 1.6,
+      this.tabSize = 2,
+      this.editorColor = defaultColorEditor,
+      this.editorBorderColor = defaultColorBorder,
+      this.editorFilenameColor = defaultColorFileName,
+      this.editorToolButtonColor = defaultToolButtonColor,
+      this.editorToolButtonTextColor = Colors.white,
+      this.editButtonBackgroundColor = defaultEditBackgroundColor,
+      this.editButtonTextColor = Colors.black,
+      this.editButtonName = "Edit",
+      this.fontSizeOfFilename,
+      this.textStyleOfTextField = const TextStyle(
+        color: Colors.black87,
+        fontSize: 16,
+        letterSpacing: 1.25,
+        fontWeight: FontWeight.w500,
+      ),
+      this.toolbarOptions = const ToolbarOptions(),
+      this.placeCursorAtTheEndOnEdit = true});
 
   double editButtonPosTop; // minimum of 50 because of the toolbar
   double editButtonPosLeft;
