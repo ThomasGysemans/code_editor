@@ -208,16 +208,17 @@ class _CodeEditorState extends State<CodeEditor> {
             top: 10,
             bottom: 50,
           ),
-          child: EditableText(
+          child: TextField(
+            decoration: InputDecoration(border: InputBorder.none),
             autofocus: true,
+            keyboardType: TextInputType.multiline,
             maxLines: null,
-            backgroundCursorColor: Colors.amber,
-            cursorColor: Colors.green,
             style: opt.textStyleOfTextField,
             focusNode: focusNode,
             controller: editingController,
             onChanged: (String v) => newValue = v,
             key: editableTextKey,
+            toolbarOptions: model.styleOptions.toolbarOptions,
           ),
         ),
       );
@@ -381,7 +382,7 @@ class _CodeEditorState extends State<CodeEditor> {
     }
 
     // We place the cursor in the end of the text field.
-    if (model.isEditing) {
+    if (model.isEditing && model.styleOptions.placeCursorAtTheEndOnEdit) {
       placeCursorAtTheEnd();
     }
 
