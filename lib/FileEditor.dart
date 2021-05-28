@@ -9,10 +9,10 @@ part of code_editor;
 /// Tip: to simplify writing code in a String,
 /// write line by line your code in a list List<String> and pass as argument list.join("\n").
 class FileEditor {
-  String name;
-  String language;
-  String code;
-  FileEditor({String name, String language, String code}) {
+  late String name;
+  String? language;
+  String? code;
+  FileEditor({String? name, String? language, String? code}) {
     this.name = name ?? "file.${language ?? 'txt'}";
     this.language = language ?? "text";
     this.code = code ?? "";

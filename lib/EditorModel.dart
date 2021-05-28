@@ -5,17 +5,17 @@ part of code_editor;
 /// EditorModel extends ChangeNotifier because we use the provider package
 /// to simplify the work.
 class EditorModel extends ChangeNotifier {
-  int _currentPositionInFiles;
+  int? _currentPositionInFiles;
   bool _isEditing = false;
-  EditorModelStyleOptions styleOptions;
-  List<String> _languages;
-  List<FileEditor> allFiles;
+  EditorModelStyleOptions? styleOptions;
+  late List<String?> _languages;
+  late List<FileEditor> allFiles;
 
   /// Define the required parameters for the editor to work properly.
   /// For that, you need to define [files] wich is a `List<FileEditor>`.
   ///
   /// You can also define your own preferences with [styleOptions].
-  EditorModel({List<FileEditor> files, this.styleOptions}) {
+  EditorModel({required List<FileEditor> files, this.styleOptions}) {
     if (this.styleOptions == null) {
       this.styleOptions = new EditorModelStyleOptions();
     }
@@ -38,8 +38,8 @@ class EditorModel extends ChangeNotifier {
 
   /// Checks in all the given files if [language] is found,
   /// then returns a List<String> of the files' content that uses [language].
-  List<String> getCodeWithLanguage(String language) {
-    List<String> listOfCode = [];
+  List<String?> getCodeWithLanguage(String language) {
+    List<String?> listOfCode = [];
     this.allFiles.forEach((FileEditor file) {
       if (file.language == language) {
         listOfCode.add(file.code);
@@ -49,7 +49,7 @@ class EditorModel extends ChangeNotifier {
   }
 
   /// Returns the code of the file where [index] corresponds.
-  String getCodeWithIndex(int index) {
+  String? getCodeWithIndex(int index) {
     return this.allFiles[index].code;
   }
 
@@ -76,7 +76,7 @@ class EditorModel extends ChangeNotifier {
   }
 
   /// Overwite the previous code of the file where [index] corresponds by [newCode].
-  void updateCodeOfIndex(int index, String newCode) {
+  void updateCodeOfIndex(int index, String? newCode) {
     this.allFiles[index].code = newCode;
     // this.allFiles[index].setCode = newCode;
   }
@@ -84,11 +84,11 @@ class EditorModel extends ChangeNotifier {
   void notify() => notifyListeners();
 
   /// Gets the index of wich file is currently displayed in the editor.
-  int get position => this._currentPositionInFiles;
+  int? get position => this._currentPositionInFiles;
 
   /// Gets which language is currently shown.
-  String get currentLanguage =>
-      this.allFiles[this._currentPositionInFiles].language;
+  String? get currentLanguage =>
+      this.allFiles[this._currentPositionInFiles!].language;
 
   /// Is the text field shown ?
   bool get isEditing => this._isEditing;
