@@ -2,6 +2,7 @@ library code_editor;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
+import 'package:flutter_highlight/themes/github.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'ToolButton.dart';
@@ -20,14 +21,14 @@ class CodeEditor extends StatefulWidget {
   /// The EditorModel in order to control the editor.
   ///
   /// This argument is @required.
-  final EditorModel? model;
+  late final EditorModel? model;
 
   /// onSubmit function to execute when the user saves changes in a file.
   /// This is a function that takes [language] and [value] as arguments.
   ///
   /// * [language] is the language of the file edited by the user.
   /// * [value] is the content of the file.
-  final Function(String? language, String? value)? onSubmit;
+  final Function(String? language, String? value) onSubmit;
 
   /// You can disable the edit button (it won't show up at all) just like this :
   ///
@@ -60,7 +61,7 @@ class CodeEditor extends StatefulWidget {
   CodeEditor({
     Key? key,
     this.model,
-    this.onSubmit,
+    required this.onSubmit,
     this.edit = true,
     this.disableNavigationbar = false,
   }) : super(key: key);
@@ -74,7 +75,7 @@ class _CodeEditorState extends State<CodeEditor> {
   GlobalKey editableTextKey = GlobalKey();
 
   /// We need it to control the content of the text field.
-  TextEditingController? editingController;
+  late TextEditingController editingController;
 
   /// The new content of a file when the user is editing one.
   String? newValue;
@@ -93,14 +94,14 @@ class _CodeEditorState extends State<CodeEditor> {
 
   @override
   void dispose() {
-    editingController!.dispose();
+    editingController.dispose();
     super.dispose();
   }
 
   /// Set the cursor at the end of the editableText.
   void placeCursorAtTheEnd() {
-    editingController!.selection = TextSelection.fromPosition(
-      TextPosition(offset: editingController!.text.length),
+    editingController.selection = TextSelection.fromPosition(
+      TextPosition(offset: editingController.text.length),
     );
   }
 
@@ -109,7 +110,7 @@ class _CodeEditorState extends State<CodeEditor> {
   /// [pos] places the cursor in the text field
   void placeCursor(int pos) {
     try {
-      editingController!.selection = TextSelection.fromPosition(
+      editingController.selection = TextSelection.fromPosition(
         TextPosition(offset: pos),
       );
     } catch (e) {
@@ -120,11 +121,7 @@ class _CodeEditorState extends State<CodeEditor> {
   @override
   Widget build(BuildContext context) {
     /// Gets the model from the parent widget.
-    EditorModel? model = widget.model;
-
-    if (model == null) {
-      model = new EditorModel(files: []);
-    }
+    EditorModel model = widget.model ??= EditorModel(files: []);
 
     /// Gets the style options from the parent widget.
     EditorModelStyleOptions? opt = model.styleOptions;
@@ -132,10 +129,10 @@ class _CodeEditorState extends State<CodeEditor> {
     String? language = model.currentLanguage;
 
     /// Which file in the list of file ?
-    int position = model.position!;
+    int? position = model.position;
 
     /// The content of the file where position corresponds to the list of file.
-    String? code = model.getCodeWithIndex(position);
+    String? code = model.getCodeWithIndex(position ?? 0);
 
     bool disableNavigationbar = widget.disableNavigationbar;
 
@@ -155,10 +152,10 @@ class _CodeEditorState extends State<CodeEditor> {
           fontFamily: "monospace",
           letterSpacing: 1.0,
           fontWeight: FontWeight.normal,
-          fontSize: opt!.fontSizeOfFilename,
+          fontSize: opt?.fontSizeOfFilename,
           color: isSelected
-              ? opt.editorFilenameColor
-              : opt.editorFilenameColor.withOpacity(0.5),
+              ? opt?.editorFilenameColor
+              : opt?.editorFilenameColor.withOpacity(0.5),
         ),
       );
     }
@@ -169,15 +166,16 @@ class _CodeEditorState extends State<CodeEditor> {
         width: double.infinity,
         height: 60,
         decoration: BoxDecoration(
-          color: opt!.editorColor,
-          border: Border(bottom: BorderSide(color: opt.editorBorderColor)),
+          color: opt?.editorColor,
+          border: Border(
+              bottom: BorderSide(color: opt?.editorBorderColor ?? Colors.blue)),
         ),
         child: ListView.builder(
           padding: EdgeInsets.only(left: 15),
-          itemCount: model!.numberOfFiles,
+          itemCount: model.numberOfFiles,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, int index) {
-            final FileEditor file = model!.getFileWithIndex(index);
+            final FileEditor file = model.getFileWithIndex(index);
 
             return Container(
               margin: EdgeInsets.only(right: 15),
@@ -187,7 +185,7 @@ class _CodeEditorState extends State<CodeEditor> {
                   child: showFilename(file.name, model.position == index),
                   onTap: () {
                     setState(() {
-                      model!.changeIndexTo(index);
+                      model.changeIndexTo(index);
                     });
                   },
                 ),
@@ -213,12 +211,12 @@ class _CodeEditorState extends State<CodeEditor> {
             autofocus: true,
             keyboardType: TextInputType.multiline,
             maxLines: null,
-            style: opt!.textStyleOfTextField,
+            style: opt?.textStyleOfTextField,
             focusNode: focusNode,
             controller: editingController,
             onChanged: (String v) => newValue = v,
             key: editableTextKey,
-            toolbarOptions: model!.styleOptions!.toolbarOptions,
+            toolbarOptions: model.styleOptions?.toolbarOptions,
           ),
         ),
       );
@@ -229,15 +227,15 @@ class _CodeEditorState extends State<CodeEditor> {
     ///
     /// This button won't appear if `edit = false`.
     Widget editButton(String name, Function press) {
-      if (widget.edit != false) {
+      if (widget.edit == false) {
         return Positioned(
-          bottom: opt!.editButtonPosBottom,
-          right: opt.editButtonPosRight,
-          top: opt.editButtonPosTop,
-          left: opt.editButtonPosLeft,
+          bottom: opt?.editButtonPosBottom,
+          right: opt?.editButtonPosRight,
+          top: opt?.editButtonPosTop,
+          left: opt?.editButtonPosLeft,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: opt.editButtonBackgroundColor,
+              primary: opt?.editButtonBackgroundColor,
             ),
             onPressed: press as void Function()?,
             child: Text(
@@ -246,7 +244,7 @@ class _CodeEditorState extends State<CodeEditor> {
                 fontSize: 16.0,
                 fontFamily: "monospace",
                 fontWeight: FontWeight.normal,
-                color: opt.editButtonTextColor,
+                color: opt?.editButtonTextColor,
               ),
             ),
           ),
@@ -261,22 +259,22 @@ class _CodeEditorState extends State<CodeEditor> {
     /// * [diff] by default, the the cursor is placed after the string placed, but you can change this (Exemple: -1 for "" placed)
     void insertIntoTextField(String str, {int diff = 0}) {
       // get the position of the cursor in the text field
-      int pos = editingController!.selection.baseOffset;
+      int pos = editingController.selection.baseOffset;
       // get the current text of the text field
-      String baseText = editingController!.text;
+      String baseText = editingController.text;
       // get the string : 0 -> pos of the current text and add the wanted string
       String begin = baseText.substring(0, pos) + str;
       // if we are already in the end of the string
       if (baseText.length == pos) {
-        editingController!.text = begin;
+        editingController.text = begin;
       } else {
         // get the end of the string and update the text of the text field
         String end = baseText.substring(pos, baseText.length);
-        editingController!.text = begin + end;
+        editingController.text = begin + end;
       }
       // if we don't do this, when we click on a toolbutton, the method
       // onChanged() isn't called, so newValue isn't updated
-      newValue = editingController!.text;
+      newValue = editingController.text;
       placeCursor(pos + str.length + diff);
     }
 
@@ -345,8 +343,9 @@ class _CodeEditorState extends State<CodeEditor> {
         height: 50,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: opt!.editorColor,
-          border: Border(bottom: BorderSide(color: opt.editorBorderColor)),
+          color: opt?.editorColor,
+          border: Border(
+              bottom: BorderSide(color: opt?.editorBorderColor ?? Colors.blue)),
         ),
         child: ListView.builder(
           padding: EdgeInsets.only(left: 15, top: 8, bottom: 8),
@@ -360,14 +359,14 @@ class _CodeEditorState extends State<CodeEditor> {
               margin: EdgeInsets.only(right: 15), // == padding right above
               child: TextButton(
                 style: TextButton.styleFrom(
-                  backgroundColor: opt.editorToolButtonColor,
+                  backgroundColor: opt?.editorToolButtonColor,
                 ),
                 onPressed: btn.press as void Function()?,
                 child: btn.icon == null
                     ? Text(
-                        btn.symbol!,
+                        btn.symbol ?? "",
                         style: TextStyle(
-                          color: opt.editorToolButtonTextColor,
+                          color: opt?.editorToolButtonTextColor,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           fontFamily: "monospace",
@@ -375,7 +374,7 @@ class _CodeEditorState extends State<CodeEditor> {
                       )
                     : FaIcon(
                         btn.icon,
-                        color: opt.editorToolButtonTextColor,
+                        color: opt?.editorToolButtonTextColor,
                         size: 15,
                       ),
               ),
@@ -386,13 +385,15 @@ class _CodeEditorState extends State<CodeEditor> {
     }
 
     // We place the cursor in the end of the text field.
-    if (model.isEditing && model.styleOptions!.placeCursorAtTheEndOnEdit) {
+
+    if (model.isEditing &&
+        (model.styleOptions?.placeCursorAtTheEndOnEdit ?? true)) {
       placeCursorAtTheEnd();
     }
 
     /// We toggle the editor and the text field.
     Widget buildContentEditor() {
-      return model!.isEditing
+      return model.isEditing
           ? Stack(
               children: <Widget>[
                 Column(
@@ -402,12 +403,13 @@ class _CodeEditorState extends State<CodeEditor> {
                     // Container of the EditableText
                     Container(
                       width: double.infinity,
-                      height: opt!.heightOfContainer,
+                      height: opt?.heightOfContainer,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border(
                           bottom: BorderSide(
-                            color: opt.editorBorderColor.withOpacity(0.4),
+                            color: opt?.editorBorderColor.withOpacity(0.4) ??
+                                Colors.blue.withOpacity(0.4),
                           ),
                         ),
                       ),
@@ -418,11 +420,9 @@ class _CodeEditorState extends State<CodeEditor> {
                 // The OK button
                 editButton("OK", () {
                   setState(() {
-                    model!.updateCodeOfIndex(position, newValue);
+                    model.updateCodeOfIndex(position ?? 0, newValue);
                     model.toggleEditing();
-                    if (widget.onSubmit != null) {
-                      widget.onSubmit!(language, newValue);
-                    }
+                    widget.onSubmit(language, newValue);
                   });
                 }),
               ],
@@ -431,24 +431,24 @@ class _CodeEditorState extends State<CodeEditor> {
               children: <Widget>[
                 Container(
                   width: double.infinity,
-                  height: opt!.heightOfContainer,
-                  color: opt.editorColor,
+                  height: opt?.heightOfContainer,
+                  color: opt?.editorColor,
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding: opt.padding,
+                      padding: opt?.padding ?? const EdgeInsets.all(3.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           HighlightView(
                             code ?? "code is null",
                             language: language,
-                            theme: opt.theme,
-                            tabSize: opt.tabSize,
+                            theme: opt?.theme ?? githubTheme,
+                            tabSize: opt?.tabSize ?? 4,
                             textStyle: TextStyle(
-                              fontFamily: opt.fontFamily,
-                              letterSpacing: opt.letterSpacing,
-                              fontSize: opt.fontSize,
-                              height: opt.lineHeight, // line-height
+                              fontFamily: opt?.fontFamily,
+                              letterSpacing: opt?.letterSpacing,
+                              fontSize: opt?.fontSize,
+                              height: opt?.lineHeight, // line-height
                             ),
                           ),
                         ],
@@ -456,9 +456,9 @@ class _CodeEditorState extends State<CodeEditor> {
                     ),
                   ),
                 ),
-                editButton(opt.editButtonName, () {
+                editButton(opt?.editButtonName ?? "Edit", () {
                   setState(() {
-                    model!.toggleEditing();
+                    model.toggleEditing();
                   });
                 }),
               ],

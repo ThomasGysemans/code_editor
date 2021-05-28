@@ -5,7 +5,7 @@ part of code_editor;
 /// EditorModel extends ChangeNotifier because we use the provider package
 /// to simplify the work.
 class EditorModel extends ChangeNotifier {
-  int? _currentPositionInFiles;
+  late int _currentPositionInFiles;
   bool _isEditing = false;
   EditorModelStyleOptions? styleOptions;
   late List<String?> _languages;
@@ -88,7 +88,7 @@ class EditorModel extends ChangeNotifier {
 
   /// Gets which language is currently shown.
   String? get currentLanguage =>
-      this.allFiles[this._currentPositionInFiles!].language;
+      this.allFiles[this._currentPositionInFiles].language;
 
   /// Is the text field shown ?
   bool get isEditing => this._isEditing;
