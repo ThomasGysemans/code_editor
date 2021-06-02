@@ -227,7 +227,7 @@ class _CodeEditorState extends State<CodeEditor> {
     ///
     /// This button won't appear if `edit = false`.
     Widget editButton(String name, Function press) {
-      if (widget.edit == false) {
+      if (widget.edit == true) {
         return Positioned(
           bottom: opt?.editButtonPosBottom,
           right: opt?.editButtonPosRight,
