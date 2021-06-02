@@ -28,7 +28,7 @@ class CodeEditor extends StatefulWidget {
   ///
   /// * [language] is the language of the file edited by the user.
   /// * [value] is the content of the file.
-  final Function(String? language, String? value) onSubmit;
+  final Function(String? language, String? value)? onSubmit;
 
   /// You can disable the edit button (it won't show up at all) just like this :
   ///
@@ -61,7 +61,7 @@ class CodeEditor extends StatefulWidget {
   CodeEditor({
     Key? key,
     this.model,
-    required this.onSubmit,
+    this.onSubmit,
     this.edit = true,
     this.disableNavigationbar = false,
   }) : super(key: key);
@@ -71,9 +71,6 @@ class CodeEditor extends StatefulWidget {
 }
 
 class _CodeEditorState extends State<CodeEditor> {
-  /// Creates the unique key of the text field.
-  GlobalKey editableTextKey = GlobalKey();
-
   /// We need it to control the content of the text field.
   late TextEditingController editingController;
 
@@ -82,6 +79,9 @@ class _CodeEditorState extends State<CodeEditor> {
 
   /// The text field wants a focus node.
   FocusNode focusNode = FocusNode();
+
+  /// Initialize the formKey for the text field
+  static final GlobalKey<FormState> editableTextKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -226,7 +226,7 @@ class _CodeEditorState extends State<CodeEditor> {
     /// particual function [press] to execute.
     ///
     /// This button won't appear if `edit = false`.
-    Widget editButton(String name, Function press) {
+    Widget editButton(String name, Function() press) {
       if (widget.edit == true) {
         return Positioned(
           bottom: opt?.editButtonPosBottom,
@@ -237,7 +237,7 @@ class _CodeEditorState extends State<CodeEditor> {
             style: ElevatedButton.styleFrom(
               primary: opt?.editButtonBackgroundColor,
             ),
-            onPressed: press as void Function()?,
+            onPressed: press,
             child: Text(
               name,
               style: TextStyle(
@@ -422,7 +422,7 @@ class _CodeEditorState extends State<CodeEditor> {
                   setState(() {
                     model.updateCodeOfIndex(position ?? 0, newValue);
                     model.toggleEditing();
-                    widget.onSubmit(language, newValue);
+                    widget.onSubmit?.call(language, newValue);
                   });
                 }),
               ],
