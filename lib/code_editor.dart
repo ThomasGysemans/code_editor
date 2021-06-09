@@ -28,6 +28,7 @@ class CodeEditor extends StatefulWidget {
   /// * [language] is the language of the file edited by the user.
   /// * [value] is the content of the file.
   final Function(String language, String value) onSubmit;
+  final Function(String language, int index, String value) onChanged;
 
   /// You can disable the edit button (it won't show up at all) just like this :
   ///
@@ -61,6 +62,7 @@ class CodeEditor extends StatefulWidget {
     Key key,
     this.model,
     this.onSubmit,
+    this.onChanged,
     this.edit = true,
     this.disableNavigationbar = false,
   }) : super(key: key);
@@ -216,7 +218,10 @@ class _CodeEditorState extends State<CodeEditor> {
             style: opt.textStyleOfTextField,
             focusNode: focusNode,
             controller: editingController,
-            onChanged: (String v) => newValue = v,
+            onChanged: (String v) {
+              newValue = v;
+              this.widget.onChanged(language, model.position, newValue);
+            },
             key: editableTextKey,
             toolbarOptions: model.styleOptions.toolbarOptions,
           ),
