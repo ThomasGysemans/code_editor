@@ -59,7 +59,7 @@ class MyEditor extends StatelessWidget {
     return SingleChildScrollView(
       child: CodeEditor(
         model: model,
-        onSubmit: (String language, String value) {
+        onSubmit: (String? language, String? value) {
           print("language = $language");
           print("value = '$value'");
         },

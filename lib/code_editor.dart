@@ -2,6 +2,7 @@ library code_editor;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
+import 'package:flutter_highlight/themes/github.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'ToolButton.dart';
@@ -20,14 +21,14 @@ class CodeEditor extends StatefulWidget {
   /// The EditorModel in order to control the editor.
   ///
   /// This argument is @required.
-  final EditorModel model;
+  late final EditorModel? model;
 
   /// onSubmit function to execute when the user saves changes in a file.
   /// This is a function that takes [language] and [value] as arguments.
   ///
   /// * [language] is the language of the file edited by the user.
   /// * [value] is the content of the file.
-  final Function(String language, String value) onSubmit;
+  final Function(String? language, String? value)? onSubmit;
 
   /// You can disable the edit button (it won't show up at all) just like this :
   ///
@@ -58,7 +59,7 @@ class CodeEditor extends StatefulWidget {
   final bool disableNavigationbar;
 
   CodeEditor({
-    Key key,
+    Key? key,
     this.model,
     this.onSubmit,
     this.edit = true,
@@ -70,17 +71,17 @@ class CodeEditor extends StatefulWidget {
 }
 
 class _CodeEditorState extends State<CodeEditor> {
-  /// Creates the unique key of the text field.
-  GlobalKey editableTextKey = GlobalKey();
-
   /// We need it to control the content of the text field.
-  TextEditingController editingController;
+  late TextEditingController editingController;
 
   /// The new content of a file when the user is editing one.
-  String newValue;
+  String? newValue;
 
   /// The text field wants a focus node.
   FocusNode focusNode = FocusNode();
+
+  /// Initialize the formKey for the text field
+  static final GlobalKey<FormState> editableTextKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -120,22 +121,18 @@ class _CodeEditorState extends State<CodeEditor> {
   @override
   Widget build(BuildContext context) {
     /// Gets the model from the parent widget.
-    EditorModel model = widget.model;
-
-    if (model == null) {
-      model = new EditorModel(files: []);
-    }
+    EditorModel model = widget.model ??= EditorModel(files: []);
 
     /// Gets the style options from the parent widget.
-    EditorModelStyleOptions opt = model.styleOptions;
+    EditorModelStyleOptions? opt = model.styleOptions;
 
-    String language = model.currentLanguage;
+    String? language = model.currentLanguage;
 
     /// Which file in the list of file ?
-    int position = model.position;
+    int? position = model.position;
 
     /// The content of the file where position corresponds to the list of file.
-    String code = model.getCodeWithIndex(position);
+    String? code = model.getCodeWithIndex(position ?? 0);
 
     bool disableNavigationbar = widget.disableNavigationbar;
 
@@ -155,10 +152,10 @@ class _CodeEditorState extends State<CodeEditor> {
           fontFamily: "monospace",
           letterSpacing: 1.0,
           fontWeight: FontWeight.normal,
-          fontSize: opt.fontSizeOfFilename,
+          fontSize: opt?.fontSizeOfFilename,
           color: isSelected
-              ? opt.editorFilenameColor
-              : opt.editorFilenameColor.withOpacity(0.5),
+              ? opt?.editorFilenameColor
+              : opt?.editorFilenameColor.withOpacity(0.5),
         ),
       );
     }
@@ -169,8 +166,9 @@ class _CodeEditorState extends State<CodeEditor> {
         width: double.infinity,
         height: 60,
         decoration: BoxDecoration(
-          color: opt.editorColor,
-          border: Border(bottom: BorderSide(color: opt.editorBorderColor)),
+          color: opt?.editorColor,
+          border: Border(
+              bottom: BorderSide(color: opt?.editorBorderColor ?? Colors.blue)),
         ),
         child: ListView.builder(
           padding: EdgeInsets.only(left: 15),
@@ -213,12 +211,12 @@ class _CodeEditorState extends State<CodeEditor> {
             autofocus: true,
             keyboardType: TextInputType.multiline,
             maxLines: null,
-            style: opt.textStyleOfTextField,
+            style: opt?.textStyleOfTextField,
             focusNode: focusNode,
             controller: editingController,
             onChanged: (String v) => newValue = v,
             key: editableTextKey,
-            toolbarOptions: model.styleOptions.toolbarOptions,
+            toolbarOptions: model.styleOptions?.toolbarOptions,
           ),
         ),
       );
@@ -228,16 +226,16 @@ class _CodeEditorState extends State<CodeEditor> {
     /// particual function [press] to execute.
     ///
     /// This button won't appear if `edit = false`.
-    Widget editButton(String name, Function press) {
-      if (widget.edit != false) {
+    Widget editButton(String name, Function() press) {
+      if (widget.edit == true) {
         return Positioned(
-          bottom: opt.editButtonPosBottom,
-          right: opt.editButtonPosRight,
-          top: opt.editButtonPosTop,
-          left: opt.editButtonPosLeft,
+          bottom: opt?.editButtonPosBottom,
+          right: opt?.editButtonPosRight,
+          top: opt?.editButtonPosTop,
+          left: opt?.editButtonPosLeft,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: opt.editButtonBackgroundColor,
+              primary: opt?.editButtonBackgroundColor,
             ),
             onPressed: press,
             child: Text(
@@ -246,7 +244,7 @@ class _CodeEditorState extends State<CodeEditor> {
                 fontSize: 16.0,
                 fontFamily: "monospace",
                 fontWeight: FontWeight.normal,
-                color: opt.editButtonTextColor,
+                color: opt?.editButtonTextColor,
               ),
             ),
           ),
@@ -345,8 +343,9 @@ class _CodeEditorState extends State<CodeEditor> {
         height: 50,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: opt.editorColor,
-          border: Border(bottom: BorderSide(color: opt.editorBorderColor)),
+          color: opt?.editorColor,
+          border: Border(
+              bottom: BorderSide(color: opt?.editorBorderColor ?? Colors.blue)),
         ),
         child: ListView.builder(
           padding: EdgeInsets.only(left: 15, top: 8, bottom: 8),
@@ -360,14 +359,14 @@ class _CodeEditorState extends State<CodeEditor> {
               margin: EdgeInsets.only(right: 15), // == padding right above
               child: TextButton(
                 style: TextButton.styleFrom(
-                  backgroundColor: opt.editorToolButtonColor,
+                  backgroundColor: opt?.editorToolButtonColor,
                 ),
-                onPressed: btn.press,
+                onPressed: btn.press as void Function()?,
                 child: btn.icon == null
                     ? Text(
-                        btn.symbol,
+                        btn.symbol ?? "",
                         style: TextStyle(
-                          color: opt.editorToolButtonTextColor,
+                          color: opt?.editorToolButtonTextColor,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           fontFamily: "monospace",
@@ -375,7 +374,7 @@ class _CodeEditorState extends State<CodeEditor> {
                       )
                     : FaIcon(
                         btn.icon,
-                        color: opt.editorToolButtonTextColor,
+                        color: opt?.editorToolButtonTextColor,
                         size: 15,
                       ),
               ),
@@ -386,7 +385,9 @@ class _CodeEditorState extends State<CodeEditor> {
     }
 
     // We place the cursor in the end of the text field.
-    if (model.isEditing && model.styleOptions.placeCursorAtTheEndOnEdit) {
+
+    if (model.isEditing &&
+        (model.styleOptions?.placeCursorAtTheEndOnEdit ?? true)) {
       placeCursorAtTheEnd();
     }
 
@@ -402,12 +403,13 @@ class _CodeEditorState extends State<CodeEditor> {
                     // Container of the EditableText
                     Container(
                       width: double.infinity,
-                      height: opt.heightOfContainer,
+                      height: opt?.heightOfContainer,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border(
                           bottom: BorderSide(
-                            color: opt.editorBorderColor.withOpacity(0.4),
+                            color: opt?.editorBorderColor.withOpacity(0.4) ??
+                                Colors.blue.withOpacity(0.4),
                           ),
                         ),
                       ),
@@ -418,11 +420,9 @@ class _CodeEditorState extends State<CodeEditor> {
                 // The OK button
                 editButton("OK", () {
                   setState(() {
-                    model.updateCodeOfIndex(position, newValue);
+                    model.updateCodeOfIndex(position ?? 0, newValue);
                     model.toggleEditing();
-                    if (widget.onSubmit != null) {
-                      widget.onSubmit(language, newValue);
-                    }
+                    widget.onSubmit?.call(language, newValue);
                   });
                 }),
               ],
@@ -431,24 +431,24 @@ class _CodeEditorState extends State<CodeEditor> {
               children: <Widget>[
                 Container(
                   width: double.infinity,
-                  height: opt.heightOfContainer,
-                  color: opt.editorColor,
+                  height: opt?.heightOfContainer,
+                  color: opt?.editorColor,
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding: opt.padding,
+                      padding: opt?.padding ?? const EdgeInsets.all(3.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           HighlightView(
                             code ?? "code is null",
                             language: language,
-                            theme: opt.theme,
-                            tabSize: opt.tabSize,
+                            theme: opt?.theme ?? githubTheme,
+                            tabSize: opt?.tabSize ?? 4,
                             textStyle: TextStyle(
-                              fontFamily: opt.fontFamily,
-                              letterSpacing: opt.letterSpacing,
-                              fontSize: opt.fontSize,
-                              height: opt.lineHeight, // line-height
+                              fontFamily: opt?.fontFamily,
+                              letterSpacing: opt?.letterSpacing,
+                              fontSize: opt?.fontSize,
+                              height: opt?.lineHeight, // line-height
                             ),
                           ),
                         ],
@@ -456,7 +456,7 @@ class _CodeEditorState extends State<CodeEditor> {
                     ),
                   ),
                 ),
-                editButton(opt.editButtonName, () {
+                editButton(opt?.editButtonName ?? "Edit", () {
                   setState(() {
                     model.toggleEditing();
                   });

@@ -27,7 +27,7 @@ class EditorModelStyleOptions {
   final String fontFamily;
 
   /// Set the letter spacing property of the text. By default `null`.
-  final double letterSpacing;
+  final double? letterSpacing;
 
   /// Set the fontSize of the file's content. By default `15`.
   final double fontSize;
@@ -55,7 +55,7 @@ class EditorModelStyleOptions {
   final Color editorToolButtonTextColor;
 
   /// Set the font size of the file's name in the navigation bar.
-  final double fontSizeOfFilename;
+  final double? fontSizeOfFilename;
 
   /// Set the textStyle of the text field. By default :
   /// ```
@@ -116,17 +116,17 @@ class EditorModelStyleOptions {
       this.toolbarOptions = const ToolbarOptions(),
       this.placeCursorAtTheEndOnEdit = true});
 
-  double editButtonPosTop; // minimum of 50 because of the toolbar
-  double editButtonPosLeft;
-  double editButtonPosBottom = 10;
-  double editButtonPosRight = 15;
+  double? editButtonPosTop; // minimum of 50 because of the toolbar
+  double? editButtonPosLeft;
+  double? editButtonPosBottom = 10;
+  double? editButtonPosRight = 15;
 
   /// You can change the position of the button "Edit" / "OK".
   /// By default, `bottom: 10`, `right: 15`.
   /// Minimum of [top] is 50, `if top < 50 => top = 50` automatically
   /// because of the navigation bar height.
   void defineEditButtonPosition({
-    top,
+    required top,
     left,
     bottom,
     right,
