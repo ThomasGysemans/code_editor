@@ -1,7 +1,12 @@
+## [1.2.0] - June 15, 2021
+
++ null-safety thanks to contributors
++ Updates the dependencies to their latest version.
+
 ## [1.1.1] - April 24, 2021
 
 + dartfmt
-+ See [https://dart.dev/tools/dart-format]
++ See [https://dart.dev/tools/dart-format]()
 
 ## [1.1.0] - April 24, 2021
 

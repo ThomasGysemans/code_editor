@@ -2,6 +2,8 @@
 
 A code editor (dart, js, html, ...) for Flutter with syntax highlighting and custom theme.
 
+* null-safety enabled since **1.2.0** thanks to contributors.
+
 ## Description
 
 The editor displays the contents of fictitious "files" that correspond to a FileEditor, each file has properties such as its name (index.html), its content and the language this file uses.
@@ -21,7 +23,7 @@ It's very easy to install :
 
 ```yaml
 dependencies:
-  code_editor: ^1.1.1
+  code_editor: ^1.2.0
 ```
 
 * Don't forget to update the modifications of the pubspec.yaml file
