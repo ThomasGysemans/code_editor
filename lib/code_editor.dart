@@ -395,7 +395,7 @@ class _CodeEditorState extends State<CodeEditor> {
 
     // We place the cursor in the end of the text field.
 
-    if (model.isEditing && 
+    if (model.isEditing &&
         (model.styleOptions?.placeCursorAtTheEndOnEdit ?? true)) {
       placeCursorAtTheEnd();
     }
