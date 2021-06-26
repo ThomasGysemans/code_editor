@@ -1,3 +1,7 @@
+## [1.3.0] - June 26, 2021
+
+- Ability to pass in custom `TextEditingController` to the `CodeEditor`.
+
 ## [1.2.0] - June 15, 2021
 
 + null-safety thanks to contributors
