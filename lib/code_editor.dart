@@ -176,8 +176,8 @@ class _CodeEditorState extends State<CodeEditor> {
         height: 60,
         decoration: BoxDecoration(
           color: opt?.editorColor,
-          border:
-              Border(bottom: BorderSide(color: opt?.editorBorderColor ?? Colors.blue)),
+          border: Border(
+              bottom: BorderSide(color: opt?.editorBorderColor ?? Colors.blue)),
         ),
         child: ListView.builder(
           padding: EdgeInsets.only(left: 15),
@@ -353,8 +353,8 @@ class _CodeEditorState extends State<CodeEditor> {
         width: double.infinity,
         decoration: BoxDecoration(
           color: opt?.editorColor,
-          border:
-              Border(bottom: BorderSide(color: opt?.editorBorderColor ?? Colors.blue)),
+          border: Border(
+              bottom: BorderSide(color: opt?.editorBorderColor ?? Colors.blue)),
         ),
         child: ListView.builder(
           padding: EdgeInsets.only(left: 15, top: 8, bottom: 8),
@@ -395,7 +395,8 @@ class _CodeEditorState extends State<CodeEditor> {
 
     // We place the cursor in the end of the text field.
 
-    if (model.isEditing && (model.styleOptions?.placeCursorAtTheEndOnEdit ?? true)) {
+    if (model.isEditing && 
+        (model.styleOptions?.placeCursorAtTheEndOnEdit ?? true)) {
       placeCursorAtTheEnd();
     }
 
