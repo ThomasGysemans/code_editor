@@ -1,3 +1,7 @@
+## [1.3.1] - August, 28, 2021
+
+- Adds the ability to move the "edit" button at the top
+
 ## [1.3.0] - June 26, 2021
 
 - Ability to pass in custom `TextEditingController` to the `CodeEditor`.
