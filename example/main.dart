@@ -56,6 +56,9 @@ class MyEditor extends StatelessWidget {
       ),
     );
 
+    // since 1.3.1
+    model.styleOptions?.defineEditButtonPosition(top: 10.0, right: 10.0);
+
     return SingleChildScrollView(
       child: CodeEditor(
         model: model,

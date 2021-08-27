@@ -116,22 +116,20 @@ class EditorModelStyleOptions {
       this.toolbarOptions = const ToolbarOptions(),
       this.placeCursorAtTheEndOnEdit = true});
 
-  double? editButtonPosTop; // minimum of 50 because of the toolbar
+  double? editButtonPosTop; // this will become 50 while editing because of the toolbar's height
   double? editButtonPosLeft;
   double? editButtonPosBottom = 10;
   double? editButtonPosRight = 15;
 
   /// You can change the position of the button "Edit" / "OK".
   /// By default, `bottom: 10`, `right: 15`.
-  /// Minimum of [top] is 50, `if top < 50 => top = 50` automatically
-  /// because of the navigation bar height.
   void defineEditButtonPosition({
     required top,
     left,
     bottom,
     right,
   }) {
-    this.editButtonPosTop = top < 50 ? 50 : top;
+    this.editButtonPosTop = top;
     this.editButtonPosLeft = left;
     this.editButtonPosBottom = bottom;
     this.editButtonPosRight = right;

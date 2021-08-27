@@ -240,7 +240,7 @@ class _CodeEditorState extends State<CodeEditor> {
         return Positioned(
           bottom: opt?.editButtonPosBottom,
           right: opt?.editButtonPosRight,
-          top: opt?.editButtonPosTop,
+          top: (model.isEditing && opt != null && opt.editButtonPosTop != null && opt.editButtonPosTop! < 50) ? 50 : opt?.editButtonPosTop,
           left: opt?.editButtonPosLeft,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
