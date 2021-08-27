@@ -58,12 +58,16 @@ class CodeEditor extends StatefulWidget {
   /// it's not possible to switch betweens other files without the navigation bar.
   final bool disableNavigationbar;
 
+  /// An optional TextEditingController that can be passed in.
+  late final TextEditingController? textEditingController;
+
   CodeEditor({
     Key? key,
     this.model,
     this.onSubmit,
     this.edit = true,
     this.disableNavigationbar = false,
+    this.textEditingController,
   }) : super(key: key);
 
   @override
@@ -87,8 +91,13 @@ class _CodeEditorState extends State<CodeEditor> {
   void initState() {
     super.initState();
 
-    /// Initialize the controller for the text field.
-    editingController = TextEditingController(text: "");
+    if (widget.textEditingController != null) {
+      // Use the user-provide controller
+      editingController = widget.textEditingController!;
+    } else {
+      /// Initialize the controller for the text field.
+      editingController = TextEditingController(text: "");
+    }
     newValue = ""; // if there are no changes
   }
 

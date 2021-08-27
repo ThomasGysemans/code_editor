@@ -87,6 +87,9 @@ class HomePage extends StatelessWidget {
       ),
     );
     
+    // A custom TextEditingController.
+    final myController = TextEditingController(text: 'hello!');
+
     return Scaffold(
       appBar: AppBar(title: Text("code_editor example")),
       body: SingleChildScrollView( // /!\ important because of the telephone keypad which causes a "RenderFlex overflowed by x pixels on the bottom" error
@@ -96,6 +99,7 @@ class HomePage extends StatelessWidget {
           edit: false, // can edit the files ? by default true
           disableNavigationbar: false, // hide the navigation bar ? by default false
           onSubmit: (String language, String value) {}, // when the user confirms changes in one of the files
+          textEditingController: myController, // Provide an optional, custom TextEditingController.
         ),
       ),
     );
