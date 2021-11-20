@@ -414,7 +414,7 @@ class _CodeEditorState extends State<CodeEditor> {
                       width: double.infinity,
                       height: opt?.heightOfContainer,
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: opt?.editModeBackgroundColor,
                         border: Border(
                           bottom: BorderSide(
                             color: opt?.editorBorderColor.withOpacity(0.4) ??

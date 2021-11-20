@@ -54,6 +54,9 @@ class EditorModelStyleOptions {
   /// Set the color of the edit button's text. By default `Color(0xFF4650c7)`.
   final Color editorToolButtonTextColor;
 
+  /// Set the background color of the editor when it's on edit mode. By default `Color(0xFFFFFFFF)`.
+  final Color editModeBackgroundColor;
+
   /// Set the font size of the file's name in the navigation bar.
   final double? fontSizeOfFilename;
 
@@ -88,6 +91,7 @@ class EditorModelStyleOptions {
   static const Color defaultColorFileName = Color(0xFF6CD07A);
   static const Color defaultToolButtonColor = Color(0xFF4650c7);
   static const Color defaultEditBackgroundColor = Color(0xFFEEEEEE);
+  static const Color defaultEditModeBackgroundColor = Color(0xFFFFFFFF);
 
   EditorModelStyleOptions(
       {this.padding = const EdgeInsets.all(15.0),
@@ -104,6 +108,7 @@ class EditorModelStyleOptions {
       this.editorToolButtonColor = defaultToolButtonColor,
       this.editorToolButtonTextColor = Colors.white,
       this.editButtonBackgroundColor = defaultEditBackgroundColor,
+      this.editModeBackgroundColor = defaultEditModeBackgroundColor,
       this.editButtonTextColor = Colors.black,
       this.editButtonName = "Edit",
       this.fontSizeOfFilename,
