@@ -1,3 +1,9 @@
+## [1.3.2] - July, 24th, 2022
+
+- Update dependencies
+- Fix dart format
+- Fix example
+
 ## [1.3.1] - August, 28, 2021
 
 - Adds the ability to move the "edit" button at the top

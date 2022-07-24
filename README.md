@@ -23,7 +23,7 @@ It's very easy to install :
 
 ```yaml
 dependencies:
-  code_editor: ^1.3.1
+  code_editor: ^1.3.2
 ```
 
 * Don't forget to update the modifications of the pubspec.yaml file
@@ -60,17 +60,17 @@ class HomePage extends StatelessWidget {
     // You are not limited.
     // By default, [name] = "file.${language ?? 'txt'}", [language] = "text" and [code] = "",
     List<FileEditor> files = [
-      new FileEditor(
+      FileEditor(
         name: "page1.html",
         language: "html",
         code: contentOfPage1.join("\n"), // [code] needs a string
       ),
-      new FileEditor(
+      FileEditor(
         name: "page2.html",
         language: "html",
         code: "<a href='page1.html'>go back</a>",
       ),
-      new FileEditor(
+      FileEditor(
         name: "style.css",
         language: "css",
         code: "a { color: red; }",
@@ -79,10 +79,10 @@ class HomePage extends StatelessWidget {
     
     // The model used by the CodeEditor widget, you need it in order to control it.
     // But, since 1.0.0, the model is not required inside the CodeEditor Widget.
-    EditorModel model = new EditorModel(
+    EditorModel model = EditorModel(
       files: files, // the files created above
       // you can customize the editor as you want
-      styleOptions: new EditorModelStyleOptions(
+      styleOptions: EditorModelStyleOptions(
         fontSize: 13,
       ),
     );

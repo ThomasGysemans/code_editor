@@ -116,7 +116,8 @@ class EditorModelStyleOptions {
       this.toolbarOptions = const ToolbarOptions(),
       this.placeCursorAtTheEndOnEdit = true});
 
-  double? editButtonPosTop; // this will become 50 while editing because of the toolbar's height
+  double?
+      editButtonPosTop; // this will become 50 while editing because of the toolbar's height
   double? editButtonPosLeft;
   double? editButtonPosBottom = 10;
   double? editButtonPosRight = 15;
