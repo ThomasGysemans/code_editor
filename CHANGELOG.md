@@ -1,16 +1,31 @@
-## [1.3.2] - July, 24th, 2022
+## [2.0.0] - July 31, 2023
 
-- Update dependencies
-- Fix dart format
-- Fix example
++ Huge refactoring of the code base
++ Add a lot of **breaking changes**
++ Add a new way to set individual files as `readonly`
++ Add undo/redo buttons
++ Add formatters (the editor is able to auto-format HTML code when the user saves modifications)
++ Add custom formatters (the dev can manipulate the new value of the TextField before saving it)
++ Change signature of `onSubmit` callback.
++ Improve comments for a better documentation in the dev's code directly
++ Set as compatible with dart 3.0
++ Now works with SDK `>=2.12.0` up to `<4.0.0`
++ Improve null safety
++ Removed ability to pass in custom `TextEditingController` to `CodeEditor`
 
-## [1.3.1] - August, 28, 2021
+## [1.3.2] - July 24, 2022
 
-- Adds the ability to move the "edit" button at the top
++ Update dependencies
++ Fix dart format
++ Fix example
+
+## [1.3.1] - August 28, 2021
+
++ Adds the ability to move the "edit" button at the top
 
 ## [1.3.0] - June 26, 2021
 
-- Ability to pass in custom `TextEditingController` to the `CodeEditor`.
++ Ability to pass in custom `TextEditingController` to the `CodeEditor`.
 
 ## [1.2.0] - June 15, 2021
 
