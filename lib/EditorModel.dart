@@ -21,7 +21,7 @@ class EditorModel extends ChangeNotifier {
   }
 
   /// Checks in all the given files if [language] is found,
-  /// then returns a List<String> of the files' content that uses [language].
+  /// then returns a `List<String>` of the files' content that uses [language].
   List<String?> getCodeWithLanguage(String language) {
     List<String?> listOfCode = [];
     this.allFiles.forEach((FileEditor file) {
@@ -45,7 +45,7 @@ class EditorModel extends ChangeNotifier {
     return this.allFiles[index];
   }
 
-  /// Switch the file using [i] as index of the List<FileEditor> files.
+  /// Switch the file using [i] as index of the `List<FileEditor>` files.
   ///
   /// The user can't change the file if he is editing another one.
   void changeIndexTo(int i) {

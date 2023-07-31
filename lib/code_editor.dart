@@ -16,7 +16,7 @@ class CodeEditor extends StatefulWidget {
   /// The EditorModel in order to control the editor.
   late final EditorModel model;
 
-  /// onSubmit function to execute when the user saves changes in a file.
+  /// Function to execute when the user saves changes in a file.
   /// This is a function that takes [language] and [value] as arguments.
   ///
   /// - [language] is the language of the file edited by the user.
@@ -43,22 +43,23 @@ class CodeEditor extends StatefulWidget {
   ///
   /// ```
   /// CodeEditor(
-  ///   formatters: ["html"]
+  ///   formatters: const ["html"]
   /// )
   /// ```
   ///
   /// IMPORTANT: this is an experimental feature,
   /// there could be some edge cases that the auto-formatter doesn't handle.
-  /// If you have issues with it, please consider filing an issue on the GitHub repo.
+  /// If you have issues with it, please consider reporting an issue on the GitHub repo.
   final List<String> formatters;
 
   /// A function you can call right before the modification of a file is applied.
-  /// Note that it is called before the auto-formatting.
+  /// 
+  /// ### Note that it is called before the auto-formatting.
   ///
   /// Be aware that if you apply changes to any file of a particular language,
   /// and at the same time allow the auto-formatting of this same language,
-  /// considering it is supported by the editor, then the result of your function
-  /// might not be the exact output the file will receive.
+  /// considering it is supported by the editor and allowed by you,
+  /// then the result of your function might not be the exact output the file will receive
   ///
   /// ```
   /// CodeEditor(
@@ -76,13 +77,13 @@ class CodeEditor extends StatefulWidget {
   /// ```
   final String Function(String language, String content)? textModifier;
 
-  /// Creates a code editor that helps users to write and read code.
+  /// Creates a code editor that helps users to write and read code on mobile.
   ///
   /// You can define:
   /// - [model] an `EditorModel`, to control the editor, its content and its files (required, if you don't want it, use `CodeEditor.empty()`)
-  /// - [onSubmit] a `Function(String language, String value)` executed when the user submits changes in a file (not required).
+  /// - [onSubmit] a `Function(String language, String value)` executed when the user submits changes in a file.
+  /// - [textModifier] a `String Function(String language, String content)` that allows you to change the modifications of the user before it is saved.
   /// - [disableNavigationbar] if set to true, the navigation bar will be hidden. By default, it is false.
-  /// - [textEditingController] optional, it could give you more control over the text field.
   /// - [formatters] the list of languages the editor is allowed to auto-format on save. As of now, only `html` is supported.
   ///
   /// ```
@@ -99,11 +100,11 @@ class CodeEditor extends StatefulWidget {
     this.formatters = const [],
   }) : super(key: key);
 
-  /// Creates a code editor that helps users to write and read code.
+  /// Creates a code editor that helps users to write and read code on mobile.
   ///
-  /// - [onSubmit] a `Function(String language, String value)` executed when the user submits changes in a file (not required).
+  /// - [onSubmit] a `Function(String language, String value)` executed when the user submits changes in a file.
+  /// - [textModifier] a `String Function(String language, String content)` that allows you to change the modifications of the user before it is saved.
   /// - [disableNavigationbar] if set to `true`, the navigation bar will be hidden. By default, it is `false`.
-  /// - [textEditingController] optional, it could give you more control over the text field.
   /// - [formatters] the list of languages the editor is allowed to auto-format on save. As of now, only `html` is supported.
   CodeEditor.empty({
     Key? key,
@@ -228,7 +229,7 @@ class _CodeEditorState extends State<CodeEditor> {
     }
   }
 
-  /// The filename in green.
+  /// The Text widget corresponding to the name of a file in the navigation bar.
   Text showFilename(String name, bool isSelected) {
     return Text(
       name,
@@ -532,7 +533,6 @@ class _CodeEditorState extends State<CodeEditor> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    // the toolbar
                     toolBar(),
                     // Container of the EditableText
                     Container(

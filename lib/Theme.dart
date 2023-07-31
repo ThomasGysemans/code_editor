@@ -21,7 +21,7 @@ const Color titlesColor = Color(0xFFDCDC9D); // titles (function's title)
 /// This is the default theme of the editor.
 ///
 /// You can create your own or use
-/// others themes by looking in this import:
+/// other themes by looking in this import:
 /// 
 /// `import 'package:flutter_highlight/themes/'`.
 const myTheme = {

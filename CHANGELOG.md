@@ -1,3 +1,8 @@
+## [2.0.1] - July 31, 2023
+
++ Fix a lot of typo
++ Add important note on README
+
 ## [2.0.0] - July 31, 2023
 
 + Huge refactoring of the code base

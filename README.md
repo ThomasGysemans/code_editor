@@ -2,7 +2,7 @@
 
 A code editor (dart, js, html, ...) for Flutter with syntax highlighting and custom theme.
 
-* null-safety enabled since **1.2.0** thanks to contributors.
+_This package is specially designed to make it easier to write code on mobile. It should work on other platforms as well, but that's not the goal. If you plan to build something just for the web/desktop, your users might suffer from the lack of features specific to those platforms._
 
 ## Description
 
@@ -23,7 +23,7 @@ It's very easy to install :
 
 ```yaml
 dependencies:
-  code_editor: ^2.0.0
+  code_editor: ^2.0.1
 ```
 
 * Don't forget to update the modifications of the pubspec.yaml file

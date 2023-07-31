@@ -8,7 +8,7 @@ part of code_editor;
 /// - [readonly] is a boolean that says if the file shall be editable or not
 ///
 /// Tip: to simplify writing code in a String,
-/// write line by line your code in a list List<String> and pass as argument list.join("\n").
+/// write line by line your code in a `List<String>` and give as the first parameter `list.join("\n")`.
 class FileEditor {
   /// The name of the file.
   /// By default is will be called "file"

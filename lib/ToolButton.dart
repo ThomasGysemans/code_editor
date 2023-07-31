@@ -9,7 +9,7 @@ class ToolButton {
   IconData? icon;
 
   /// Simple Unicode characters to represent what the button's going to do.
-  /// If there is not character able to describe its role, then use `icon`.
+  /// If there is no character able to describe its role, then use `icon`.
   String? symbol;
 
   ToolButton({

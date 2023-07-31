@@ -19,12 +19,11 @@ class EditorModelStyleOptions {
   final double heightOfContainer;
 
   /// Set the theme of the syntax. code_editor has its own theme.
-  /// You can create your own or use others themes by looking at :
+  /// You can create your own or use other themes by looking at:
   /// `import 'package:flutter_highlight/themes/'`.
   final Map<String, TextStyle> theme;
 
-  /// By default, the "undo" and "redo" buttons
-  /// allow the user to undo or redo the modification of a file.
+  /// The "undo" and "redo" buttons allow the user to undo or redo the modification of a file.
   ///
   /// They are automatically hidden if `readonly` is set to `true` on the `CodeEditor` widget.
   final bool showUndoRedoButtons;
@@ -63,7 +62,7 @@ class EditorModelStyleOptions {
   /// Set the font size of the file's name in the navigation bar.
   final double? fontSizeOfFilename;
 
-  /// Set the textStyle of the text field. By default :
+  /// Set the textStyle of the text field. By default:
   /// ```
   /// TextStyle(
   ///   color: Colors.black87,
@@ -78,7 +77,7 @@ class EditorModelStyleOptions {
   /// By default `Color(0xFFEEEEEE)`.
   final Color editButtonBackgroundColor;
 
-  /// The text color fo the button "Edit".
+  /// The text color of the "Edit" button.
   /// By default `Colors.black`.
   final Color editButtonTextColor;
 
@@ -86,6 +85,8 @@ class EditorModelStyleOptions {
   /// By default `Edit`.
   final String editButtonName;
 
+  /// By default the undo and redo buttons will be placed at the left of the Edit button.
+  /// Set this property to `true` in order to place those buttons at the right.
   final bool reverseEditAndUndoRedoButtons;
 
   /// Options that can be proposed to the user when they select some text.
@@ -149,7 +150,7 @@ class EditorModelStyleOptions {
   double? editButtonPosBottom = 10;
   double? editButtonPosRight = 15;
 
-  /// You can change the position of the button "Edit" / "OK".
+  /// You can change the position of the button "Edit"/"OK".
   /// By default, `bottom: 10`, `right: 15`.
   void defineEditButtonPosition({
     double? top,
