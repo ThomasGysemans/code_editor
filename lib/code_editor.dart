@@ -21,7 +21,7 @@ class CodeEditor extends StatefulWidget {
   ///
   /// - [language] is the language of the file edited by the user.
   /// - [value] is the content of the file.
-  final Function(String? language, String? value)? onSubmit;
+  final Function(String language, String value)? onSubmit;
 
   /// You can disable the edit button (it won't show up at all) just like this:
   ///
@@ -91,7 +91,7 @@ class CodeEditor extends StatefulWidget {
   ///
   /// You can define:
   /// - [model] an `EditorModel`, to control the editor, its content and its files (required, if you don't want it, use `CodeEditor.empty()`)
-  /// - [onSubmit] a `Function(String? language, String? value)` executed when the user submits changes in a file (not required).
+  /// - [onSubmit] a `Function(String language, String value)` executed when the user submits changes in a file (not required).
   /// - [readonly] a boolean to set the possibility to edit the file or not. By default, it is `false`.
   /// - [disableNavigationbar] if set to true, the navigation bar will be hidden. By default, it is false.
   /// - [textEditingController] optional, it could give you more control over the text field.
@@ -114,7 +114,7 @@ class CodeEditor extends StatefulWidget {
 
   /// Creates a code editor that helps users to write and read code.
   ///
-  /// - [onSubmit] a `Function(String? language, String? value)` executed when the user submits changes in a file (not required).
+  /// - [onSubmit] a `Function(String language, String value)` executed when the user submits changes in a file (not required).
   /// - [readonly] a boolean to set the possibility to edit the file or not. By default, it is `false`.
   /// - [disableNavigationbar] if set to `true`, the navigation bar will be hidden. By default, it is `false`.
   /// - [textEditingController] optional, it could give you more control over the text field.
@@ -180,21 +180,21 @@ class _CodeEditorState extends State<CodeEditor> {
   }
 
   void recordBeforeAction(FileEditor file) {
-    undos[file.name]!.add(file.code!);
+    undos[file.name]!.add(file.code);
     clearRedos(); // if the user edits an older version, the redo stack is lost
   }
 
   void clearRedos() {
-    FileEditor editedFile = widget.model.getFileWithIndex(widget.model.position!)!;
+    FileEditor editedFile = widget.model.getFileWithIndex(widget.model.position)!;
     redos[editedFile.name] = [];
   }
 
   void undo() {
-    int currentPosition = widget.model.position!;
+    int currentPosition = widget.model.position;
     FileEditor editedFile = widget.model.getFileWithIndex(currentPosition)!;
     if (undos[editedFile.name]?.length != 0) {
       String previousState = undos[editedFile.name]!.removeLast();
-      String currentState = editedFile.code!;
+      String currentState = editedFile.code;
       redos[editedFile.name]!.add(currentState);
       setState(() {
         widget.model.updateCodeOfIndex(currentPosition, previousState);
@@ -203,10 +203,10 @@ class _CodeEditorState extends State<CodeEditor> {
   }
 
   void redo() {
-    int currentPosition = widget.model.position!;
+    int currentPosition = widget.model.position;
     FileEditor currentFile = widget.model.getFileWithIndex(currentPosition)!;
     if (redos[currentFile.name]?.length != 0) {
-      undos[currentFile.name]!.add(currentFile.code ?? "");
+      undos[currentFile.name]!.add(currentFile.code);
       setState(() {
         widget.model.updateCodeOfIndex(currentPosition, redos[currentFile.name]!.removeLast());
       });
@@ -284,7 +284,7 @@ class _CodeEditorState extends State<CodeEditor> {
                 onTap: () {
                   setState(() {
                     widget.model.changeIndexTo(index);
-                    editingController.text = widget.model.getCodeWithIndex(index) ?? "";
+                    editingController.text = widget.model.getCodeWithIndex(index);
                   });
                 },
               ),
@@ -576,10 +576,10 @@ class _CodeEditorState extends State<CodeEditor> {
 
                     String newCode = newValue ?? "";
                     if (widget.textModifier != null) {
-                      newCode = widget.textModifier!(widget.model.currentLanguage ?? "", newCode);
+                      newCode = widget.textModifier!(widget.model.currentLanguage, newCode);
                     }
                     if (widget.formatters.contains(widget.model.currentLanguage)) {
-                      newCode = format(newCode, widget.model.currentLanguage ?? "");
+                      newCode = format(newCode, widget.model.currentLanguage);
                     }
                     widget.model.updateCodeOfIndex(position ?? 0, newCode);
                     widget.model.toggleEditing();

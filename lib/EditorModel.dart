@@ -4,13 +4,13 @@ part of code_editor;
 class EditorModel extends ChangeNotifier {
   late EditorModelStyleOptions styleOptions;
   late List<FileEditor> allFiles;
-  
+
   int _currentPositionInFiles = 0;
   bool _isEditing = false;
 
   /// Define the required parameters for the editor to work properly.
   /// For that, you need to define [files] which is a `List<FileEditor>`.
-  /// 
+  ///
   /// You can also define your own preferences with [styleOptions] (instance of `EditorModelStyleOptions`).
   EditorModel({
     List<FileEditor>? files,
@@ -33,7 +33,7 @@ class EditorModel extends ChangeNotifier {
   }
 
   /// Returns the code of the file where [index] corresponds.
-  String? getCodeWithIndex(int index) {
+  String getCodeWithIndex(int index) {
     return this.allFiles[index].code;
   }
 
@@ -70,11 +70,10 @@ class EditorModel extends ChangeNotifier {
   void notify() => notifyListeners();
 
   /// Gets the index of which file is currently displayed in the editor.
-  int? get position => this._currentPositionInFiles;
+  int get position => this._currentPositionInFiles;
 
   /// Gets which language is currently shown.
-  String? get currentLanguage =>
-      this.allFiles[this._currentPositionInFiles].language;
+  String get currentLanguage => this.allFiles[this._currentPositionInFiles].language;
 
   /// Is the text field shown?
   bool get isEditing => this._isEditing;
