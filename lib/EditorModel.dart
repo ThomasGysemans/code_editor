@@ -63,8 +63,8 @@ class EditorModel extends ChangeNotifier {
   }
 
   /// Overwrite the current code of the file where [index] corresponds by [newCode].
-  void updateCodeOfIndex(int index, String? newCode) {
-    this.allFiles[index].code = newCode ?? "";
+  void updateCodeOfIndex(int index, String newCode) {
+    this.allFiles[index].code = newCode;
   }
 
   void notify() => notifyListeners();

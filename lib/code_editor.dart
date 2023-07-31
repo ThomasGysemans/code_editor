@@ -406,10 +406,10 @@ class _CodeEditorState extends State<CodeEditor> {
     final EditorModelStyleOptions opt = widget.model.styleOptions;
 
     /// Which file in the list of file?
-    final int? position = widget.model.position;
+    final int position = widget.model.position;
 
     /// The content of the file where position corresponds to the list of file.
-    final String? code = widget.model.getCodeWithIndex(position ?? 0);
+    final String? code = widget.model.getCodeWithIndex(position);
 
     // if the user does not change the value in the text field
     newValue = code;
@@ -554,7 +554,7 @@ class _CodeEditorState extends State<CodeEditor> {
                 editButton("OK", () {
                   // Here, the user completed a change in the code
                   setState(() {
-                    recordBeforeAction(widget.model.getFileWithIndex(position ?? 0)!);
+                    recordBeforeAction(widget.model.getFileWithIndex(position)!);
 
                     String newCode = newValue ?? "";
                     if (widget.textModifier != null) {
@@ -563,7 +563,8 @@ class _CodeEditorState extends State<CodeEditor> {
                     if (widget.formatters.contains(widget.model.currentLanguage)) {
                       newCode = format(newCode, widget.model.currentLanguage);
                     }
-                    widget.model.updateCodeOfIndex(position ?? 0, newCode);
+                    editingController.text = newCode; // without it editing twice the same file in a row would display the previous content
+                    widget.model.updateCodeOfIndex(position, newCode);
                     widget.model.toggleEditing();
                     widget.onSubmit?.call(widget.model.currentLanguage, newCode);
                   });

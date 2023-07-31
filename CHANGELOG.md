@@ -1,6 +1,7 @@
-## [2.0.1] - July 31, 2023
+## [2.0.2] - July 31, 2023
 
 + Fix a lot of typo
++ Fix a glitch (the text field would not have the same value as the current file)
 + Add important note on README
 
 ## [2.0.0] - July 31, 2023
