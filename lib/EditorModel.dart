@@ -1,39 +1,23 @@
 part of code_editor;
 
-/// Use the EditorModel into CodeEditor in order to control the editor.
-///
-/// EditorModel extends ChangeNotifier because we use the provider package
-/// to simplify the work.
+/// Use the EditorModel into CodeEditor in order to control the files.
 class EditorModel extends ChangeNotifier {
-  late int _currentPositionInFiles;
-  bool _isEditing = false;
-  EditorModelStyleOptions? styleOptions;
-  late List<String?> _languages;
+  late EditorModelStyleOptions styleOptions;
   late List<FileEditor> allFiles;
+  
+  int _currentPositionInFiles = 0;
+  bool _isEditing = false;
 
   /// Define the required parameters for the editor to work properly.
-  /// For that, you need to define [files] wich is a `List<FileEditor>`.
-  ///
-  /// You can also define your own preferences with [styleOptions].
-  EditorModel({required List<FileEditor> files, this.styleOptions}) {
-    if (this.styleOptions == null) {
-      this.styleOptions = new EditorModelStyleOptions();
-    }
-    this._languages = [];
-    this._currentPositionInFiles = 0;
-    if (files.length == 0) {
-      files.add(
-        new FileEditor(
-          name: "index.html",
-          language: "html",
-          code: "",
-        ),
-      );
-    }
-    files.forEach((FileEditor file) {
-      this._languages.add(file.language);
-    });
-    this.allFiles = files;
+  /// For that, you need to define [files] which is a `List<FileEditor>`.
+  /// 
+  /// You can also define your own preferences with [styleOptions] (instance of `EditorModelStyleOptions`).
+  EditorModel({
+    List<FileEditor>? files,
+    EditorModelStyleOptions? styleOptions,
+  }) {
+    this.styleOptions = styleOptions ?? EditorModelStyleOptions();
+    this.allFiles = files ?? [];
   }
 
   /// Checks in all the given files if [language] is found,
@@ -54,7 +38,10 @@ class EditorModel extends ChangeNotifier {
   }
 
   /// Returns the file where [index] corresponds.
-  FileEditor getFileWithIndex(int index) {
+  FileEditor? getFileWithIndex(int index) {
+    if (index >= this.allFiles.length || index < 0) {
+      return null;
+    }
     return this.allFiles[index];
   }
 
@@ -75,22 +62,21 @@ class EditorModel extends ChangeNotifier {
     this.notify();
   }
 
-  /// Overwite the previous code of the file where [index] corresponds by [newCode].
+  /// Overwrite the current code of the file where [index] corresponds by [newCode].
   void updateCodeOfIndex(int index, String? newCode) {
-    this.allFiles[index].code = newCode;
-    // this.allFiles[index].setCode = newCode;
+    this.allFiles[index].code = newCode ?? "";
   }
 
   void notify() => notifyListeners();
 
-  /// Gets the index of wich file is currently displayed in the editor.
+  /// Gets the index of which file is currently displayed in the editor.
   int? get position => this._currentPositionInFiles;
 
   /// Gets which language is currently shown.
   String? get currentLanguage =>
       this.allFiles[this._currentPositionInFiles].language;
 
-  /// Is the text field shown ?
+  /// Is the text field shown?
   bool get isEditing => this._isEditing;
 
   /// Gets the number of files.

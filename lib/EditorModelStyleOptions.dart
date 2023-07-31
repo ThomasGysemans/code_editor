@@ -3,9 +3,9 @@ part of code_editor;
 /// Set the style of CodeEditor.
 /// You have to use it in EditorModel() just like this :
 /// ```
-/// EditorModel model = new EditorModel(
+/// EditorModel model = EditorModel(
 ///   files, // My files...
-///   styleOptions: new EditorModelStyleOptions(
+///   styleOptions: EditorModelStyleOptions(
 ///     fontSize: 13, // Example
 ///   ),
 /// );
@@ -22,6 +22,12 @@ class EditorModelStyleOptions {
   /// You can create your own or use others themes by looking at :
   /// `import 'package:flutter_highlight/themes/'`.
   final Map<String, TextStyle> theme;
+
+  /// By default, the "undo" and "redo" buttons
+  /// allow the user to undo or redo the modification of a file.
+  ///
+  /// They are automatically hidden if `readonly` is set to `true` on the `CodeEditor` widget.
+  final bool showUndoRedoButtons;
 
   /// Set the font family of the entire editor. By default `"monospace"`.
   final String fontFamily;
@@ -80,7 +86,25 @@ class EditorModelStyleOptions {
   /// By default `Edit`.
   final String editButtonName;
 
+  final bool reverseEditAndUndoRedoButtons;
+
+  /// Options that can be proposed to the user when they select some text.
+  /// By default, when a user selects some text, they can't copy or cut it.
+  /// To fix this, you could use:
+  /// 
+  /// ```
+  /// EditorModelStyleOptions(
+  ///   toolbarOptions: ToolbarOptions(
+  ///     copy: true, // now the user can copy a selection
+  ///     cut: true, // cut it
+  ///     selectAll: true // and select it all
+  ///   ),
+  /// )
+  /// ```
   final ToolbarOptions toolbarOptions;
+
+  /// If the user is editing a file, then shall we place the cursor at the end?
+  /// Default value is `true`.
   final bool placeCursorAtTheEndOnEdit;
 
   static const Color defaultColorEditor = Color(0xff2E3152);
@@ -89,35 +113,38 @@ class EditorModelStyleOptions {
   static const Color defaultToolButtonColor = Color(0xFF4650c7);
   static const Color defaultEditBackgroundColor = Color(0xFFEEEEEE);
 
-  EditorModelStyleOptions(
-      {this.padding = const EdgeInsets.all(15.0),
-      this.heightOfContainer = 300,
-      this.theme = myTheme,
-      this.fontFamily = "monospace",
-      this.letterSpacing,
-      this.fontSize = 15,
-      this.lineHeight = 1.6,
-      this.tabSize = 2,
-      this.editorColor = defaultColorEditor,
-      this.editorBorderColor = defaultColorBorder,
-      this.editorFilenameColor = defaultColorFileName,
-      this.editorToolButtonColor = defaultToolButtonColor,
-      this.editorToolButtonTextColor = Colors.white,
-      this.editButtonBackgroundColor = defaultEditBackgroundColor,
-      this.editButtonTextColor = Colors.black,
-      this.editButtonName = "Edit",
-      this.fontSizeOfFilename,
-      this.textStyleOfTextField = const TextStyle(
-        color: Colors.black87,
-        fontSize: 16,
-        letterSpacing: 1.25,
-        fontWeight: FontWeight.w500,
-      ),
-      this.toolbarOptions = const ToolbarOptions(),
-      this.placeCursorAtTheEndOnEdit = true});
+  EditorModelStyleOptions({
+    this.padding = const EdgeInsets.all(15.0),
+    this.heightOfContainer = 300,
+    this.theme = myTheme,
+    this.fontFamily = "monospace",
+    this.letterSpacing,
+    this.fontSize = 15,
+    this.lineHeight = 1.6,
+    this.tabSize = 2,
+    this.showUndoRedoButtons = false,
+    this.reverseEditAndUndoRedoButtons = false,
+    this.editorColor = defaultColorEditor,
+    this.editorBorderColor = defaultColorBorder,
+    this.editorFilenameColor = defaultColorFileName,
+    this.editorToolButtonColor = defaultToolButtonColor,
+    this.editorToolButtonTextColor = Colors.white,
+    this.editButtonBackgroundColor = defaultEditBackgroundColor,
+    this.editButtonTextColor = Colors.black,
+    this.editButtonName = "Edit",
+    this.fontSizeOfFilename,
+    this.textStyleOfTextField = const TextStyle(
+      color: Colors.black87,
+      fontSize: 16,
+      letterSpacing: 1.25,
+      fontWeight: FontWeight.w500,
+    ),
+    this.toolbarOptions = const ToolbarOptions(),
+    this.placeCursorAtTheEndOnEdit = true,
+  });
 
-  double?
-      editButtonPosTop; // this will become 50 while editing because of the toolbar's height
+  /// this will become 50 while editing because of the toolbar's height
+  double? editButtonPosTop;
   double? editButtonPosLeft;
   double? editButtonPosBottom = 10;
   double? editButtonPosRight = 15;
@@ -125,10 +152,10 @@ class EditorModelStyleOptions {
   /// You can change the position of the button "Edit" / "OK".
   /// By default, `bottom: 10`, `right: 15`.
   void defineEditButtonPosition({
-    required top,
-    left,
-    bottom,
-    right,
+    double? top,
+    double? left,
+    double? bottom,
+    double? right,
   }) {
     this.editButtonPosTop = top;
     this.editButtonPosLeft = left;

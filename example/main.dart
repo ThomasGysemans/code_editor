@@ -58,14 +58,11 @@ class HomePage extends StatelessWidget {
     // But, since 1.0.0, the model is not required inside the CodeEditor Widget.
     EditorModel model = EditorModel(
       files: files, // the files created above
-      // you can customize the editor as you want
+      // you can customize the editor as you wish
       styleOptions: EditorModelStyleOptions(
         fontSize: 13,
       ),
     );
-
-    // A custom TextEditingController.
-    final myController = TextEditingController(text: 'hello!');
 
     return Scaffold(
       appBar: AppBar(title: const Text("code_editor example")),
@@ -74,12 +71,9 @@ class HomePage extends StatelessWidget {
         // display the CodeEditor widget
         child: CodeEditor(
           model: model, // the model created above, not required since 1.0.0
-          edit: true, // can edit the files? by default true
+          readonly: true, // can edit the files? by default true
           onSubmit: (String? language, String? value) => print("yo"),
-          disableNavigationbar:
-              false, // hide the navigation bar ? by default false
-          textEditingController:
-              myController, // Provide an optional, custom TextEditingController.
+          disableNavigationbar: false, // hide the navigation bar ? by default false
         ),
       ),
     );
