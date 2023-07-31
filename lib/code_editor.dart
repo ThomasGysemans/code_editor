@@ -21,18 +21,7 @@ class CodeEditor extends StatefulWidget {
   ///
   /// - [language] is the language of the file edited by the user.
   /// - [value] is the content of the file.
-  final Function(String language, String value)? onSubmit;
-
-  /// You can disable the edit button (it won't show up at all) just like this:
-  ///
-  /// ```
-  /// CodeEditor(
-  ///   readonly: true, // removes the edit button
-  /// )
-  /// ```
-  ///
-  /// By default, the value is false.
-  final bool readonly;
+  final void Function(String language, String value)? onSubmit;
 
   /// You can disable the navigation bar like this:
   ///
@@ -92,7 +81,6 @@ class CodeEditor extends StatefulWidget {
   /// You can define:
   /// - [model] an `EditorModel`, to control the editor, its content and its files (required, if you don't want it, use `CodeEditor.empty()`)
   /// - [onSubmit] a `Function(String language, String value)` executed when the user submits changes in a file (not required).
-  /// - [readonly] a boolean to set the possibility to edit the file or not. By default, it is `false`.
   /// - [disableNavigationbar] if set to true, the navigation bar will be hidden. By default, it is false.
   /// - [textEditingController] optional, it could give you more control over the text field.
   /// - [formatters] the list of languages the editor is allowed to auto-format on save. As of now, only `html` is supported.
@@ -107,7 +95,6 @@ class CodeEditor extends StatefulWidget {
     required this.model,
     this.textModifier,
     this.onSubmit,
-    this.readonly = false,
     this.disableNavigationbar = false,
     this.formatters = const [],
   }) : super(key: key);
@@ -115,14 +102,12 @@ class CodeEditor extends StatefulWidget {
   /// Creates a code editor that helps users to write and read code.
   ///
   /// - [onSubmit] a `Function(String language, String value)` executed when the user submits changes in a file (not required).
-  /// - [readonly] a boolean to set the possibility to edit the file or not. By default, it is `false`.
   /// - [disableNavigationbar] if set to `true`, the navigation bar will be hidden. By default, it is `false`.
   /// - [textEditingController] optional, it could give you more control over the text field.
   /// - [formatters] the list of languages the editor is allowed to auto-format on save. As of now, only `html` is supported.
   CodeEditor.empty({
     Key? key,
     this.textModifier,
-    this.readonly = false,
     this.disableNavigationbar = false,
     this.onSubmit,
     this.formatters = const [],
@@ -324,8 +309,11 @@ class _CodeEditorState extends State<CodeEditor> {
   /// Creates the edit button and the save button ("OK") with a
   /// particular function to execute.
   ///
-  /// This button won't appear if `readonly = true`.
-  Widget editButton(String name, Function() press) {
+  /// This button won't appear if the current file is set as `readonly`.
+  Widget editButton(String name, void Function() press) {
+    if (widget.model.getFileWithIndex(widget.model.position)?.readonly == true) {
+      return SizedBox.shrink();
+    }
     final opt = widget.model.styleOptions;
     List<ElevatedButton> buttons = [];
     if (widget.model.styleOptions.showUndoRedoButtons) {
@@ -360,37 +348,31 @@ class _CodeEditorState extends State<CodeEditor> {
         ),
       ]);
     }
-    buttons.add(
-      ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: opt.editButtonBackgroundColor,
+    buttons.add(ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: opt.editButtonBackgroundColor,
+      ),
+      onPressed: press,
+      child: Text(
+        name,
+        style: TextStyle(
+          fontSize: 16.0,
+          fontFamily: "monospace",
+          fontWeight: FontWeight.normal,
+          color: opt.editButtonTextColor,
         ),
-        onPressed: press,
-        child: Text(
-          name,
-          style: TextStyle(
-            fontSize: 16.0,
-            fontFamily: "monospace",
-            fontWeight: FontWeight.normal,
-            color: opt.editButtonTextColor,
-          ),
-        ),
-      )
-    );
+      ),
+    ));
     // if the user allowed modifications:
-    if (widget.readonly == false) {
-      return Positioned(
-        bottom: opt.editButtonPosBottom,
-        right: opt.editButtonPosRight,
-        top: (widget.model.isEditing && opt.editButtonPosTop != null && opt.editButtonPosTop! < 50) ? 50 : opt.editButtonPosTop,
-        left: opt.editButtonPosLeft,
-        child: Row(
-          children: opt.reverseEditAndUndoRedoButtons ? buttons.reversed.toList() : buttons,
-        ),
-      );
-    } else {
-      return SizedBox.shrink();
-    }
+    return Positioned(
+      bottom: opt.editButtonPosBottom,
+      right: opt.editButtonPosRight,
+      top: (widget.model.isEditing && opt.editButtonPosTop != null && opt.editButtonPosTop! < 50) ? 50 : opt.editButtonPosTop,
+      left: opt.editButtonPosLeft,
+      child: Row(
+        children: opt.reverseEditAndUndoRedoButtons ? buttons.reversed.toList() : buttons,
+      ),
+    );
   }
 
   /// Add a particular string where the cursor is in the text field.

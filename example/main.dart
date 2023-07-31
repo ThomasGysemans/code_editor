@@ -46,6 +46,7 @@ class HomePage extends StatelessWidget {
         name: "page2.html",
         language: "html",
         code: "<a href='page1.html'>go back</a>",
+        readonly: true, // this file won't be editable
       ),
       FileEditor(
         name: "style.css",
@@ -61,7 +62,7 @@ class HomePage extends StatelessWidget {
       files: files, // the files created above
       // you can customize the editor as you want
       styleOptions: EditorModelStyleOptions(
-        showUndoRedoButtons: false,
+        showUndoRedoButtons: true,
         reverseEditAndUndoRedoButtons: true,
       )..defineEditButtonPosition(
           bottom: 10,
@@ -75,9 +76,7 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: CodeEditor(
           model: model,
-          readonly: false,
           formatters: const ["html"],
-          onSubmit: (String language, String value) => print("A file of language $language was edited."),
         ),
       ),
     );
