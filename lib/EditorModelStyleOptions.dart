@@ -108,6 +108,10 @@ class EditorModelStyleOptions {
   /// Default value is `true`.
   final bool placeCursorAtTheEndOnEdit;
 
+  /// By default, if the user clicks somewhere outside the text field,
+  /// the focus will be removed (so `true` by default).
+  final bool removeFocusOfTextFieldOnTapOutside;
+
   static const Color defaultColorEditor = Color(0xff2E3152);
   static const Color defaultColorBorder = Color(0xFF3E416E);
   static const Color defaultColorFileName = Color(0xFF6CD07A);
@@ -142,6 +146,7 @@ class EditorModelStyleOptions {
     ),
     this.toolbarOptions = const ToolbarOptions(),
     this.placeCursorAtTheEndOnEdit = true,
+    this.removeFocusOfTextFieldOnTapOutside = true,
   });
 
   /// this will become 50 while editing because of the toolbar's height

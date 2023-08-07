@@ -1,3 +1,9 @@
+## [2.1.0] - August 7, 2023
+
++ Fix `reverseEditAndUndoRedoButtons` so that the "undo" button is always at the right of the "redo" button.
++ Fix the example of the package and improve the README so that users don't make the mistake of declaring the instance of `EditorModel` in the `build` function in `Stateful` widgets.
++ Add a new option in `EditorModelStyleOptions` named "removeFocusOfTextFieldOnTapOutside", whose default value is `true`.
+
 ## [2.0.2] - July 31, 2023
 
 + Fix a lot of typo

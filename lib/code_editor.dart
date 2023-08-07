@@ -53,7 +53,7 @@ class CodeEditor extends StatefulWidget {
   final List<String> formatters;
 
   /// A function you can call right before the modification of a file is applied.
-  /// 
+  ///
   /// ### Note that it is called before the auto-formatting.
   ///
   /// Be aware that if you apply changes to any file of a particular language,
@@ -300,6 +300,14 @@ class _CodeEditorState extends State<CodeEditor> {
           focusNode: focusNode,
           controller: editingController,
           onChanged: (String v) => newValue = v,
+          onTapOutside: (_) {
+            if (widget.model.styleOptions.removeFocusOfTextFieldOnTapOutside) {
+              // Because it's too annoying on IPhone
+              if (focusNode.hasFocus) {
+                focusNode.unfocus();
+              }
+            }
+          },
           key: editableTextKey,
           toolbarOptions: widget.model.styleOptions.toolbarOptions,
         ),
@@ -318,36 +326,41 @@ class _CodeEditorState extends State<CodeEditor> {
     final opt = widget.model.styleOptions;
     List<ElevatedButton> buttons = [];
     if (widget.model.styleOptions.showUndoRedoButtons) {
-      buttons.addAll([
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            elevation: 0.0,
-            backgroundColor: Colors.white.withOpacity(0),
-          ),
-          child: FaIcon(
-            FontAwesomeIcons.arrowRotateLeft,
-            color: Colors.white.withOpacity(0.5),
-            size: 18,
-          ),
-          onPressed: () {
-            undo();
-          },
+      ElevatedButton undoButton = ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          elevation: 0.0,
+          backgroundColor: Colors.white.withOpacity(0),
         ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            elevation: 0.0,
-            backgroundColor: Colors.white.withOpacity(0),
-          ),
-          child: FaIcon(
-            FontAwesomeIcons.arrowRotateRight,
-            color: Colors.white.withOpacity(0.5),
-            size: 18,
-          ),
-          onPressed: () {
-            redo();
-          },
+        child: FaIcon(
+          FontAwesomeIcons.arrowRotateLeft,
+          color: Colors.white.withOpacity(0.5),
+          size: 18,
         ),
-      ]);
+        onPressed: () {
+          undo();
+        },
+      );
+      ElevatedButton redoButton = ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          elevation: 0.0,
+          backgroundColor: Colors.white.withOpacity(0),
+        ),
+        child: FaIcon(
+          FontAwesomeIcons.arrowRotateRight,
+          color: Colors.white.withOpacity(0.5),
+          size: 18,
+        ),
+        onPressed: () {
+          redo();
+        },
+      );
+      if (opt.reverseEditAndUndoRedoButtons) {
+        // it will get reversed afterwards
+        // so that it's always `undoButton` before `redoButton`
+        buttons.addAll([redoButton, undoButton]);
+      } else {
+        buttons.addAll([undoButton, redoButton]);
+      }
     }
     buttons.add(ElevatedButton(
       style: ElevatedButton.styleFrom(

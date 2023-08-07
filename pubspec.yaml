@@ -1,6 +1,6 @@
 name: code_editor
 description: A code editor (dart, js, html,...) for Flutter with syntax highlighting and custom theme.
-version: 2.0.2
+version: 2.1.0
 homepage: https://github.com/CodoPixel/code_editor
 
 environment:

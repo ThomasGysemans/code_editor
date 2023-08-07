@@ -23,7 +23,7 @@ It's very easy to install :
 
 ```yaml
 dependencies:
-  code_editor: ^2.0.2
+  code_editor: ^2.1.0
 ```
 
 * Don't forget to update the modifications of the pubspec.yaml file
@@ -40,7 +40,7 @@ import 'package:code_editor/code_editor.dart';
 
 ## Usage
 
-After importing the package into your project, you can initialize an `EditorModel` to control the editor :
+After importing the package into your project, you can initialize an `EditorModel` to control the editor. If you use a `Stateless` widget, then declare this code in the `build()` function:
 
 ```dart
 // example of a easier way to write code
@@ -117,6 +117,61 @@ return SingleChildScrollView(
 );
 ```
 
+**However**, if you are using a `Stateful` widget, declaring the `model` in the `build()` function would cause the entire editor to go back to its initial state as soon as you update the state of something else in your widget. As a consequence, when using the `CodeEditor` in a `Stateful` widget, you want to declare the `model` in `initState()`:
+
+```dart
+
+class _HomePageState extends State<HomePage> {
+  late EditorModel model;
+
+  @override
+  void initState() {
+    super.initState();
+    List<String> contentOfPage1 = [
+      "<!DOCTYPE html>",
+      "<html lang='fr'>",
+      "\t<body>",
+      "\t\t<a href='page2.html'>go to page 2</a>",
+      "\t</body>",
+      "</html>",
+    ];
+
+    List<FileEditor> files = [
+      FileEditor(
+        name: "page1.html",
+        language: "html",
+        code: contentOfPage1.join("\n"),
+      ),
+    ];
+
+    model = EditorModel(
+      files: files,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("code_editor example")),
+      // /!\ The SingleChildScrollView is important because of the phone's keypad which causes a "RenderFlex overflowed by x pixels on the bottom" error
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            CodeEditor(
+              model: model,
+              formatters: const ["html"],
+            ),
+
+            // Some code below that updates the state of the entire widget
+            // ...
+          ]
+        ),
+      ),
+    );
+  }
+}
+```
+
 For the style options, you have a lot of possibilites : 
 
 ```dart
@@ -146,6 +201,7 @@ class EditorModelStyleOptions {
   final bool reverseEditAndUndoRedoButtons;
   final ToolbarOptions toolbarOptions;
   final bool placeCursorAtTheEndOnEdit;
+  final bool removeFocusOfTextFieldOnTapOutside;
 }
 ```
 
