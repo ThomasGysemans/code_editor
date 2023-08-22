@@ -4,6 +4,8 @@ A code editor (dart, js, html, ...) for Flutter with syntax highlighting and cus
 
 _This package is specially designed to make it easier to write code on mobile. It should work on other platforms as well, but that's not the goal. If you plan to build something just for the web/desktop, your users might suffer from the lack of features specific to those platforms._
 
+List of supported languages: https://github.com/git-touch/highlight.dart/tree/master/highlight/lib/languages
+
 ## Description
 
 The editor displays the contents of fictitious "files" that correspond to instances of `FileEditor`. Each file has properties: its name, its content and the language this file uses.
