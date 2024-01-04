@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:code_editor/code_editor.dart';
+import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
 
@@ -74,9 +74,9 @@ class _HomePageState extends State<HomePage> {
         showUndoRedoButtons: true,
         reverseEditAndUndoRedoButtons: true,
       )..defineEditButtonPosition(
-          bottom: 10,
-          left: 15,
-        ),
+        bottom: 10,
+        left: 15,
+      ),
     );
   }
 
