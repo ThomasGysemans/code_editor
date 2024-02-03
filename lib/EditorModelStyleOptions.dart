@@ -89,10 +89,14 @@ class EditorModelStyleOptions {
   /// Set this property to `true` in order to place those buttons at the right.
   final bool reverseEditAndUndoRedoButtons;
 
+  /// Set this property to `false` in order to hidden toolbar.
+  /// Default value is `true`.
+  final bool showToolbar;
+
   /// Options that can be proposed to the user when they select some text.
   /// By default, when a user selects some text, they can't copy or cut it.
   /// To fix this, you could use:
-  /// 
+  ///
   /// ```
   /// EditorModelStyleOptions(
   ///   toolbarOptions: ToolbarOptions(
@@ -144,6 +148,7 @@ class EditorModelStyleOptions {
       letterSpacing: 1.25,
       fontWeight: FontWeight.w500,
     ),
+    this.showToolbar = true,
     this.toolbarOptions = const ToolbarOptions(),
     this.placeCursorAtTheEndOnEdit = true,
     this.removeFocusOfTextFieldOnTapOutside = true,
