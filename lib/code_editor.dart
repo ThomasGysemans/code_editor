@@ -432,19 +432,19 @@ class _CodeEditorState extends State<CodeEditor> {
       final List<ToolButton> toolButtons = [
         ToolButton(
           press: () => insertIntoTextField("\t"),
-          icon: FontAwesomeIcons.indent,
+          icon: FontAwesomeIcons.indent.data,
         ),
         ToolButton(
           press: () => insertIntoTextField("<"),
-          icon: FontAwesomeIcons.chevronLeft,
+          icon: FontAwesomeIcons.chevronLeft.data,
         ),
         ToolButton(
           press: () => insertIntoTextField(">"),
-          icon: FontAwesomeIcons.chevronRight,
+          icon: FontAwesomeIcons.chevronRight.data,
         ),
         ToolButton(
           press: () => insertIntoTextField('""', diff: -1),
-          icon: FontAwesomeIcons.quoteLeft,
+          icon: FontAwesomeIcons.quoteLeft.data,
         ),
         ToolButton(
           press: () => insertIntoTextField(":"),
@@ -468,23 +468,23 @@ class _CodeEditorState extends State<CodeEditor> {
         ),
         ToolButton(
           press: () => insertIntoTextField("-"),
-          icon: FontAwesomeIcons.minus,
+          icon: FontAwesomeIcons.minus.data,
         ),
         ToolButton(
           press: () => insertIntoTextField("="),
-          icon: FontAwesomeIcons.equals,
+          icon: FontAwesomeIcons.equals.data,
         ),
         ToolButton(
           press: () => insertIntoTextField("+"),
-          icon: FontAwesomeIcons.plus,
+          icon: FontAwesomeIcons.plus.data,
         ),
         ToolButton(
           press: () => insertIntoTextField("/"),
-          icon: FontAwesomeIcons.divide,
+          icon: FontAwesomeIcons.divide.data,
         ),
         ToolButton(
           press: () => insertIntoTextField("*"),
-          icon: FontAwesomeIcons.xmark,
+          icon: FontAwesomeIcons.xmark.data,
         ),
       ];
 
@@ -523,7 +523,7 @@ class _CodeEditorState extends State<CodeEditor> {
                         ),
                       )
                     : FaIcon(
-                        btn.icon,
+                        FaIconData(btn.icon!),
                         color: opt.editorToolButtonTextColor,
                         size: 15,
                       ),
