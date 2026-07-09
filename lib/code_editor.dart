@@ -147,7 +147,8 @@ class _CodeEditorState extends State<CodeEditor> {
     super.initState();
 
     // Initialize the controller for the text field with the code of the first file.
-    editingController = TextEditingController(text: widget.model.getCodeWithIndex(0));
+    editingController =
+        TextEditingController(text: widget.model.getCodeWithIndex(0));
 
     newValue = ""; // if there are no changes
 
@@ -171,7 +172,8 @@ class _CodeEditorState extends State<CodeEditor> {
   }
 
   void clearRedos() {
-    FileEditor editedFile = widget.model.getFileWithIndex(widget.model.position)!;
+    FileEditor editedFile =
+        widget.model.getFileWithIndex(widget.model.position)!;
     redos[editedFile.name] = [];
   }
 
@@ -194,7 +196,8 @@ class _CodeEditorState extends State<CodeEditor> {
     if (redos[currentFile.name]?.length != 0) {
       undos[currentFile.name]!.add(currentFile.code);
       setState(() {
-        widget.model.updateCodeOfIndex(currentPosition, redos[currentFile.name]!.removeLast());
+        widget.model.updateCodeOfIndex(
+            currentPosition, redos[currentFile.name]!.removeLast());
       });
     }
   }
@@ -238,7 +241,9 @@ class _CodeEditorState extends State<CodeEditor> {
         letterSpacing: 1.0,
         fontWeight: FontWeight.normal,
         fontSize: widget.model.styleOptions.fontSizeOfFilename,
-        color: isSelected ? widget.model.styleOptions.editorFilenameColor : widget.model.styleOptions.editorFilenameColor.withOpacity(0.5),
+        color: isSelected
+            ? widget.model.styleOptions.editorFilenameColor
+            : widget.model.styleOptions.editorFilenameColor.withOpacity(0.5),
       ),
     );
   }
@@ -251,7 +256,8 @@ class _CodeEditorState extends State<CodeEditor> {
       decoration: BoxDecoration(
         color: widget.model.styleOptions.editorColor,
         border: Border(
-          bottom: BorderSide(color: widget.model.styleOptions.editorBorderColor),
+          bottom:
+              BorderSide(color: widget.model.styleOptions.editorBorderColor),
         ),
       ),
       child: ListView.builder(
@@ -270,7 +276,8 @@ class _CodeEditorState extends State<CodeEditor> {
                 onTap: () {
                   setState(() {
                     widget.model.changeIndexTo(index);
-                    editingController.text = widget.model.getCodeWithIndex(index);
+                    editingController.text =
+                        widget.model.getCodeWithIndex(index);
                   });
                 },
               ),
@@ -320,7 +327,8 @@ class _CodeEditorState extends State<CodeEditor> {
   ///
   /// This button won't appear if the current file is set as `readonly`.
   Widget editButton(String name, void Function() press) {
-    if (widget.model.getFileWithIndex(widget.model.position)?.readonly == true) {
+    if (widget.model.getFileWithIndex(widget.model.position)?.readonly ==
+        true) {
       return SizedBox.shrink();
     }
     final opt = widget.model.styleOptions;
@@ -381,10 +389,16 @@ class _CodeEditorState extends State<CodeEditor> {
     return Positioned(
       bottom: opt.editButtonPosBottom,
       right: opt.editButtonPosRight,
-      top: (widget.model.isEditing && opt.editButtonPosTop != null && opt.editButtonPosTop! < 50) ? 50 : opt.editButtonPosTop,
+      top: (widget.model.isEditing &&
+              opt.editButtonPosTop != null &&
+              opt.editButtonPosTop! < 50)
+          ? 50
+          : opt.editButtonPosTop,
       left: opt.editButtonPosLeft,
       child: Row(
-        children: opt.reverseEditAndUndoRedoButtons ? buttons.reversed.toList() : buttons,
+        children: opt.reverseEditAndUndoRedoButtons
+            ? buttons.reversed.toList()
+            : buttons,
       ),
     );
   }
@@ -535,7 +549,8 @@ class _CodeEditorState extends State<CodeEditor> {
     }
 
     // We place the cursor in the end of the text field.
-    if (widget.model.isEditing && widget.model.styleOptions.placeCursorAtTheEndOnEdit) {
+    if (widget.model.isEditing &&
+        widget.model.styleOptions.placeCursorAtTheEndOnEdit) {
       placeCursorAtTheEnd();
     }
 
@@ -546,7 +561,7 @@ class _CodeEditorState extends State<CodeEditor> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    toolBar(),
+                    if (widget.model.styleOptions.showToolbar) toolBar(),
                     // Container of the EditableText
                     Container(
                       width: double.infinity,
@@ -567,19 +582,24 @@ class _CodeEditorState extends State<CodeEditor> {
                 editButton("OK", () {
                   // Here, the user completed a change in the code
                   setState(() {
-                    recordBeforeAction(widget.model.getFileWithIndex(position)!);
+                    recordBeforeAction(
+                        widget.model.getFileWithIndex(position)!);
 
                     String newCode = newValue ?? "";
                     if (widget.textModifier != null) {
-                      newCode = widget.textModifier!(widget.model.currentLanguage, newCode);
+                      newCode = widget.textModifier!(
+                          widget.model.currentLanguage, newCode);
                     }
-                    if (widget.formatters.contains(widget.model.currentLanguage)) {
+                    if (widget.formatters
+                        .contains(widget.model.currentLanguage)) {
                       newCode = format(newCode, widget.model.currentLanguage);
                     }
-                    editingController.text = newCode; // without it editing twice the same file in a row would display the previous content
+                    editingController.text =
+                        newCode; // without it editing twice the same file in a row would display the previous content
                     widget.model.updateCodeOfIndex(position, newCode);
                     widget.model.toggleEditing();
-                    widget.onSubmit?.call(widget.model.currentLanguage, newCode);
+                    widget.onSubmit
+                        ?.call(widget.model.currentLanguage, newCode);
                   });
                 }),
               ],
