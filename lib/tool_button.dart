@@ -12,9 +12,5 @@ class ToolButton {
   /// If there is no character able to describe its role, then use `icon`.
   String? symbol;
 
-  ToolButton({
-    required this.press,
-    this.icon,
-    this.symbol,
-  });
+  ToolButton({required this.press, this.icon, this.symbol});
 }

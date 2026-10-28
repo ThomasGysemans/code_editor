@@ -4,22 +4,20 @@ import 'package:code_editor/code_editor.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: const HomePage(),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -57,11 +55,7 @@ class _HomePageState extends State<HomePage> {
         code: "<a href='page1.html'>go back</a>",
         readonly: true, // this file won't be editable
       ),
-      FileEditor(
-        name: "style.css",
-        language: "css",
-        code: "a { color: red; }",
-      ),
+      FileEditor(name: "style.css", language: "css", code: "a { color: red; }"),
     ];
 
     // The model used by the CodeEditor widget, you need it in order to control it.
@@ -73,10 +67,7 @@ class _HomePageState extends State<HomePage> {
       styleOptions: EditorModelStyleOptions(
         showUndoRedoButtons: true,
         reverseEditAndUndoRedoButtons: true,
-      )..defineEditButtonPosition(
-          bottom: 10,
-          left: 15,
-        ),
+      )..defineEditButtonPosition(bottom: 10, left: 15),
     );
   }
 
@@ -88,15 +79,11 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CodeEditor(
-              model: model,
-              formatters: const ["html"],
-            ),
+            CodeEditor(model: model, formatters: const ["html"]),
 
             // Just to show you how to add elements below the editor (or above),
             // here simple widgets you can remove.
             // It also shows how to manipulate state on the same page as an editor.
-
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -105,7 +92,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: const Text("click"),
             ),
-            Text("count = $count")
+            Text("count = $count"),
           ],
         ),
       ),

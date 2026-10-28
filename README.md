@@ -25,8 +25,10 @@ It's very easy to install :
 
 ```yaml
 dependencies:
-  code_editor: ^2.1.1
+  code_editor: ^3.0.0
 ```
+
+Version 3.0.0 requires Dart 3.9 and Flutter 3.35 or newer. On older SDKs (before Flutter 3.44), use `code_editor: ^2.1.1`.
 
 * Don't forget to update the modifications of the pubspec.yaml file
 
@@ -201,7 +203,7 @@ class EditorModelStyleOptions {
   final Color editButtonTextColor;
   final String editButtonName;
   final bool reverseEditAndUndoRedoButtons;
-  final ToolbarOptions toolbarOptions;
+  final EditableTextContextMenuBuilder? contextMenuBuilder;
   final bool placeCursorAtTheEndOnEdit;
   final bool removeFocusOfTextFieldOnTapOutside;
 }

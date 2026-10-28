@@ -1,20 +1,20 @@
-library code_editor;
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'ToolButton.dart';
+import 'tool_button.dart';
 import 'formatters/html.dart';
 
-part 'EditorModel.dart';
-part 'FileEditor.dart';
-part 'EditorModelStyleOptions.dart';
-part 'Theme.dart';
+part 'editor_model.dart';
+part 'file_editor.dart';
+part 'editor_model_style_options.dart';
+part 'theme.dart';
 
 class CodeEditor extends StatefulWidget {
   /// The EditorModel in order to control the editor.
-  late final EditorModel model;
+  final EditorModel model;
 
   /// Function to execute when the user saves changes in a file.
   /// This is a function that takes [language] and [value] as arguments.
@@ -91,14 +91,14 @@ class CodeEditor extends StatefulWidget {
   ///   model: myModel,
   /// ),
   /// ```
-  CodeEditor({
-    Key? key,
+  const CodeEditor({
+    super.key,
     required this.model,
     this.textModifier,
     this.onSubmit,
     this.disableNavigationbar = false,
     this.formatters = const [],
-  }) : super(key: key);
+  });
 
   /// Creates a code editor that helps users to write and read code on mobile.
   /// It contains a single empty text file named "file.txt".
@@ -108,17 +108,15 @@ class CodeEditor extends StatefulWidget {
   /// - [disableNavigationbar] if set to `true`, the navigation bar will be hidden. By default, it is `false`.
   /// - [formatters] the list of languages the editor is allowed to auto-format on save. As of now, only `html` is supported.
   CodeEditor.empty({
-    Key? key,
+    super.key,
     this.textModifier,
     this.disableNavigationbar = false,
     this.onSubmit,
     this.formatters = const [],
-  }) : super(key: key) {
-    this.model = EditorModel(files: [FileEditor(name: "file.txt")]);
-  }
+  }) : model = EditorModel(files: [FileEditor(name: "file.txt")]);
 
   @override
-  _CodeEditorState createState() => _CodeEditorState();
+  State<CodeEditor> createState() => _CodeEditorState();
 }
 
 class _CodeEditorState extends State<CodeEditor> {
@@ -145,7 +143,9 @@ class _CodeEditorState extends State<CodeEditor> {
     super.initState();
 
     // Initialize the controller for the text field with the code of the first file.
-    editingController = TextEditingController(text: widget.model.getCodeWithIndex(0));
+    editingController = TextEditingController(
+      text: widget.model.getCodeWithIndex(0),
+    );
 
     newValue = ""; // if there are no changes
 
@@ -170,14 +170,16 @@ class _CodeEditorState extends State<CodeEditor> {
   }
 
   void clearRedos() {
-    FileEditor editedFile = widget.model.getFileWithIndex(widget.model.position)!;
+    FileEditor editedFile = widget.model.getFileWithIndex(
+      widget.model.position,
+    )!;
     redos[editedFile.name] = [];
   }
 
   void undo() {
     int currentPosition = widget.model.position;
     FileEditor editedFile = widget.model.getFileWithIndex(currentPosition)!;
-    if (undos[editedFile.name]?.length != 0) {
+    if (undos[editedFile.name]?.isNotEmpty ?? false) {
       String previousState = undos[editedFile.name]!.removeLast();
       String currentState = editedFile.code;
       redos[editedFile.name]!.add(currentState);
@@ -190,10 +192,13 @@ class _CodeEditorState extends State<CodeEditor> {
   void redo() {
     int currentPosition = widget.model.position;
     FileEditor currentFile = widget.model.getFileWithIndex(currentPosition)!;
-    if (redos[currentFile.name]?.length != 0) {
+    if (redos[currentFile.name]?.isNotEmpty ?? false) {
       undos[currentFile.name]!.add(currentFile.code);
       setState(() {
-        widget.model.updateCodeOfIndex(currentPosition, redos[currentFile.name]!.removeLast());
+        widget.model.updateCodeOfIndex(
+          currentPosition,
+          redos[currentFile.name]!.removeLast(),
+        );
       });
     }
   }
@@ -237,7 +242,11 @@ class _CodeEditorState extends State<CodeEditor> {
         letterSpacing: 1.0,
         fontWeight: FontWeight.normal,
         fontSize: widget.model.styleOptions.fontSizeOfFilename,
-        color: isSelected ? widget.model.styleOptions.editorFilenameColor : widget.model.styleOptions.editorFilenameColor.withOpacity(0.5),
+        color: isSelected
+            ? widget.model.styleOptions.editorFilenameColor
+            : widget.model.styleOptions.editorFilenameColor.withValues(
+                alpha: 0.5,
+              ),
       ),
     );
   }
@@ -250,7 +259,9 @@ class _CodeEditorState extends State<CodeEditor> {
       decoration: BoxDecoration(
         color: widget.model.styleOptions.editorColor,
         border: Border(
-          bottom: BorderSide(color: widget.model.styleOptions.editorBorderColor),
+          bottom: BorderSide(
+            color: widget.model.styleOptions.editorBorderColor,
+          ),
         ),
       ),
       child: ListView.builder(
@@ -269,7 +280,9 @@ class _CodeEditorState extends State<CodeEditor> {
                 onTap: () {
                   setState(() {
                     widget.model.changeIndexTo(index);
-                    editingController.text = widget.model.getCodeWithIndex(index);
+                    editingController.text = widget.model.getCodeWithIndex(
+                      index,
+                    );
                   });
                 },
               ),
@@ -280,16 +293,21 @@ class _CodeEditorState extends State<CodeEditor> {
     );
   }
 
+  /// The context menu of the text field when no custom builder is given (same as Flutter's default).
+  static Widget _defaultContextMenuBuilder(
+    BuildContext context,
+    EditableTextState editableTextState,
+  ) {
+    return AdaptiveTextSelectionToolbar.editableText(
+      editableTextState: editableTextState,
+    );
+  }
+
   /// Creates the text field.
   SingleChildScrollView buildEditableText() {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.only(
-          right: 10,
-          left: 10,
-          top: 10,
-          bottom: 50,
-        ),
+        padding: EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 50),
         child: TextField(
           decoration: InputDecoration(border: InputBorder.none),
           autofocus: true,
@@ -307,7 +325,9 @@ class _CodeEditorState extends State<CodeEditor> {
               }
             }
           },
-          toolbarOptions: widget.model.styleOptions.toolbarOptions,
+          contextMenuBuilder:
+              widget.model.styleOptions.contextMenuBuilder ??
+              _defaultContextMenuBuilder,
         ),
       ),
     );
@@ -318,21 +338,23 @@ class _CodeEditorState extends State<CodeEditor> {
   ///
   /// This button won't appear if the current file is set as `readonly`.
   Widget editButton(String name, void Function() press) {
-    if (widget.model.getFileWithIndex(widget.model.position)?.readonly == true) {
+    if (widget.model.getFileWithIndex(widget.model.position)?.readonly ==
+        true) {
       return SizedBox.shrink();
     }
     final opt = widget.model.styleOptions;
     List<ElevatedButton> buttons = [];
     // The undo and redo buttons are hidden while editing a file
-    if (widget.model.styleOptions.showUndoRedoButtons && !widget.model.isEditing) {
+    if (widget.model.styleOptions.showUndoRedoButtons &&
+        !widget.model.isEditing) {
       ElevatedButton undoButton = ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0.0,
-          backgroundColor: Colors.white.withOpacity(0),
+          backgroundColor: Colors.white.withValues(alpha: 0),
         ),
         child: FaIcon(
           FontAwesomeIcons.arrowRotateLeft,
-          color: Colors.white.withOpacity(0.5),
+          color: Colors.white.withValues(alpha: 0.5),
           size: 18,
         ),
         onPressed: () {
@@ -342,11 +364,11 @@ class _CodeEditorState extends State<CodeEditor> {
       ElevatedButton redoButton = ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0.0,
-          backgroundColor: Colors.white.withOpacity(0),
+          backgroundColor: Colors.white.withValues(alpha: 0),
         ),
         child: FaIcon(
           FontAwesomeIcons.arrowRotateRight,
-          color: Colors.white.withOpacity(0.5),
+          color: Colors.white.withValues(alpha: 0.5),
           size: 18,
         ),
         onPressed: () {
@@ -361,29 +383,38 @@ class _CodeEditorState extends State<CodeEditor> {
         buttons.addAll([undoButton, redoButton]);
       }
     }
-    buttons.add(ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: opt.editButtonBackgroundColor,
-      ),
-      onPressed: press,
-      child: Text(
-        name,
-        style: TextStyle(
-          fontSize: 16.0,
-          fontFamily: "monospace",
-          fontWeight: FontWeight.normal,
-          color: opt.editButtonTextColor,
+    buttons.add(
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: opt.editButtonBackgroundColor,
+        ),
+        onPressed: press,
+        child: Text(
+          name,
+          style: TextStyle(
+            fontSize: 16.0,
+            fontFamily: "monospace",
+            fontWeight: FontWeight.normal,
+            color: opt.editButtonTextColor,
+          ),
         ),
       ),
-    ));
+    );
     // if the user allowed modifications:
     return Positioned(
       bottom: opt.editButtonPosBottom,
       right: opt.editButtonPosRight,
-      top: (widget.model.isEditing && opt.editButtonPosTop != null && opt.editButtonPosTop! < 50) ? 50 : opt.editButtonPosTop,
+      top:
+          (widget.model.isEditing &&
+              opt.editButtonPosTop != null &&
+              opt.editButtonPosTop! < 50)
+          ? 50
+          : opt.editButtonPosTop,
       left: opt.editButtonPosLeft,
       child: Row(
-        children: opt.reverseEditAndUndoRedoButtons ? buttons.reversed.toList() : buttons,
+        children: opt.reverseEditAndUndoRedoButtons
+            ? buttons.reversed.toList()
+            : buttons,
       ),
     );
   }
@@ -421,7 +452,7 @@ class _CodeEditorState extends State<CodeEditor> {
     final int position = widget.model.position;
 
     /// The content of the file where position corresponds to the list of file.
-    final String? code = widget.model.getCodeWithIndex(position);
+    final String code = widget.model.getCodeWithIndex(position);
 
     // if the user does not change the value in the text field
     newValue = code;
@@ -431,28 +462,22 @@ class _CodeEditorState extends State<CodeEditor> {
       final List<ToolButton> toolButtons = [
         ToolButton(
           press: () => insertIntoTextField("\t"),
-          icon: FontAwesomeIcons.indent,
+          icon: FontAwesomeIcons.indent.data,
         ),
         ToolButton(
           press: () => insertIntoTextField("<"),
-          icon: FontAwesomeIcons.chevronLeft,
+          icon: FontAwesomeIcons.chevronLeft.data,
         ),
         ToolButton(
           press: () => insertIntoTextField(">"),
-          icon: FontAwesomeIcons.chevronRight,
+          icon: FontAwesomeIcons.chevronRight.data,
         ),
         ToolButton(
           press: () => insertIntoTextField('""', diff: -1),
-          icon: FontAwesomeIcons.quoteLeft,
+          icon: FontAwesomeIcons.quoteLeft.data,
         ),
-        ToolButton(
-          press: () => insertIntoTextField(":"),
-          symbol: ":",
-        ),
-        ToolButton(
-          press: () => insertIntoTextField(";"),
-          symbol: ";",
-        ),
+        ToolButton(press: () => insertIntoTextField(":"), symbol: ":"),
+        ToolButton(press: () => insertIntoTextField(";"), symbol: ";"),
         ToolButton(
           press: () => insertIntoTextField('()', diff: -1),
           symbol: "()",
@@ -467,23 +492,23 @@ class _CodeEditorState extends State<CodeEditor> {
         ),
         ToolButton(
           press: () => insertIntoTextField("-"),
-          icon: FontAwesomeIcons.minus,
+          icon: FontAwesomeIcons.minus.data,
         ),
         ToolButton(
           press: () => insertIntoTextField("="),
-          icon: FontAwesomeIcons.equals,
+          icon: FontAwesomeIcons.equals.data,
         ),
         ToolButton(
           press: () => insertIntoTextField("+"),
-          icon: FontAwesomeIcons.plus,
+          icon: FontAwesomeIcons.plus.data,
         ),
         ToolButton(
           press: () => insertIntoTextField("/"),
-          icon: FontAwesomeIcons.divide,
+          icon: FontAwesomeIcons.divide.data,
         ),
         ToolButton(
           press: () => insertIntoTextField("*"),
-          icon: FontAwesomeIcons.xmark,
+          icon: FontAwesomeIcons.xmark.data,
         ),
       ];
 
@@ -492,9 +517,7 @@ class _CodeEditorState extends State<CodeEditor> {
         width: double.infinity,
         decoration: BoxDecoration(
           color: opt.editorColor,
-          border: Border(
-            bottom: BorderSide(color: opt.editorBorderColor),
-          ),
+          border: Border(bottom: BorderSide(color: opt.editorBorderColor)),
         ),
         child: ListView.builder(
           padding: EdgeInsets.only(left: 15, top: 8, bottom: 8),
@@ -522,7 +545,7 @@ class _CodeEditorState extends State<CodeEditor> {
                         ),
                       )
                     : FaIcon(
-                        btn.icon,
+                        FaIconData(btn.icon!),
                         color: opt.editorToolButtonTextColor,
                         size: 15,
                       ),
@@ -534,7 +557,8 @@ class _CodeEditorState extends State<CodeEditor> {
     }
 
     // We place the cursor in the end of the text field.
-    if (widget.model.isEditing && widget.model.styleOptions.placeCursorAtTheEndOnEdit) {
+    if (widget.model.isEditing &&
+        widget.model.styleOptions.placeCursorAtTheEndOnEdit) {
       placeCursorAtTheEnd();
     }
 
@@ -554,7 +578,7 @@ class _CodeEditorState extends State<CodeEditor> {
                         color: Colors.white,
                         border: Border(
                           bottom: BorderSide(
-                            color: opt.editorBorderColor.withOpacity(0.4),
+                            color: opt.editorBorderColor.withValues(alpha: 0.4),
                           ),
                         ),
                       ),
@@ -568,22 +592,33 @@ class _CodeEditorState extends State<CodeEditor> {
                   setState(() {
                     String newCode = newValue ?? "";
                     if (widget.textModifier != null) {
-                      newCode = widget.textModifier!(widget.model.currentLanguage, newCode);
+                      newCode = widget.textModifier!(
+                        widget.model.currentLanguage,
+                        newCode,
+                      );
                     }
-                    if (widget.formatters.contains(widget.model.currentLanguage)) {
+                    if (widget.formatters.contains(
+                      widget.model.currentLanguage,
+                    )) {
                       newCode = format(newCode, widget.model.currentLanguage);
                     }
 
                     // Only a real modification can be undone
-                    FileEditor editedFile = widget.model.getFileWithIndex(position)!;
+                    FileEditor editedFile = widget.model.getFileWithIndex(
+                      position,
+                    )!;
                     if (newCode != editedFile.code) {
                       recordBeforeAction(editedFile);
                     }
 
-                    editingController.text = newCode; // without it editing twice the same file in a row would display the previous content
+                    editingController.text =
+                        newCode; // without it editing twice the same file in a row would display the previous content
                     widget.model.updateCodeOfIndex(position, newCode);
                     widget.model.toggleEditing();
-                    widget.onSubmit?.call(widget.model.currentLanguage, newCode);
+                    widget.onSubmit?.call(
+                      widget.model.currentLanguage,
+                      newCode,
+                    );
                   });
                 }),
               ],
@@ -601,7 +636,7 @@ class _CodeEditorState extends State<CodeEditor> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           HighlightView(
-                            code ?? "there is no code",
+                            code,
                             language: widget.model.currentLanguage,
                             theme: opt.theme,
                             tabSize: opt.tabSize,
@@ -620,7 +655,9 @@ class _CodeEditorState extends State<CodeEditor> {
                 editButton(opt.editButtonName, () {
                   setState(() {
                     // the file might have changed since the last edit (undo, redo...)
-                    editingController.text = widget.model.getCodeWithIndex(position);
+                    editingController.text = widget.model.getCodeWithIndex(
+                      position,
+                    );
                     widget.model.toggleEditing();
                   });
                 }),

@@ -1,4 +1,4 @@
-part of code_editor;
+part of 'code_editor.dart';
 
 /// A file in the editor, used by EditorModel [model.code].
 ///

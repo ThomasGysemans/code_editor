@@ -19,7 +19,8 @@ String formatHTML(String content, {int tabSize = 2}) {
       if (counter > 0) {
         newContent += '\n';
         if ((isClosingTag ? counter - 1 > 0 : counter > 0)) {
-          newContent += (' ' * tabSize * (isClosingTag ? counter - 1 : counter));
+          newContent +=
+              (' ' * tabSize * (isClosingTag ? counter - 1 : counter));
         }
       }
       if (!isXMLTag) {
@@ -33,7 +34,8 @@ String formatHTML(String content, {int tabSize = 2}) {
       text = false;
       tag = true;
     } else {
-      bool isControlledCharacter = currentChar == '\n' || currentChar == "\t" || currentChar == "\r";
+      bool isControlledCharacter =
+          currentChar == '\n' || currentChar == "\t" || currentChar == "\r";
       bool isWhiteSpace = currentChar == " ";
       if (currentChar == '>') {
         tag = false;
@@ -49,7 +51,9 @@ String formatHTML(String content, {int tabSize = 2}) {
       // - having white space
       // - entering a tag with white space
       // - having special escaped characters such as \n, \t or \r
-      if ((previousCharacter == " " && isWhiteSpace) || (!tag && enteringTag && isWhiteSpace) || isControlledCharacter) {
+      if ((previousCharacter == " " && isWhiteSpace) ||
+          (!tag && enteringTag && isWhiteSpace) ||
+          isControlledCharacter) {
         continue;
       }
       previousCharacter = currentChar;

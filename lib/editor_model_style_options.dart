@@ -1,4 +1,4 @@
-part of code_editor;
+part of 'code_editor.dart';
 
 /// Set the style of CodeEditor.
 /// You have to use it in EditorModel() just like this :
@@ -90,20 +90,25 @@ class EditorModelStyleOptions {
   /// Set this property to `true` in order to place those buttons at the right.
   final bool reverseEditAndUndoRedoButtons;
 
-  /// Options that can be proposed to the user when they select some text.
-  /// By default, when a user selects some text, they can't copy or cut it.
-  /// To fix this, you could use:
-  /// 
+  /// Builds the menu proposed to the user when they select some text in the text field.
+  /// By default (`null`), the platform's default menu is used (copy, cut, paste, select all...).
+  /// You can choose which buttons are shown like this:
+  ///
   /// ```
   /// EditorModelStyleOptions(
-  ///   toolbarOptions: ToolbarOptions(
-  ///     copy: true, // now the user can copy a selection
-  ///     cut: true, // cut it
-  ///     selectAll: true // and select it all
-  ///   ),
+  ///   contextMenuBuilder: (context, editableTextState) {
+  ///     return AdaptiveTextSelectionToolbar.buttonItems(
+  ///       anchors: editableTextState.contextMenuAnchors,
+  ///       buttonItems: editableTextState.contextMenuButtonItems
+  ///           .where((item) => item.type != ContextMenuButtonType.cut) // the user can't cut a selection
+  ///           .toList(),
+  ///     );
+  ///   },
   /// )
   /// ```
-  final ToolbarOptions toolbarOptions;
+  ///
+  /// To disable the menu, return `const SizedBox.shrink()`.
+  final EditableTextContextMenuBuilder? contextMenuBuilder;
 
   /// If the user is editing a file, then shall we place the cursor at the end?
   /// Default value is `true`.
@@ -145,7 +150,7 @@ class EditorModelStyleOptions {
       letterSpacing: 1.25,
       fontWeight: FontWeight.w500,
     ),
-    this.toolbarOptions = const ToolbarOptions(),
+    this.contextMenuBuilder,
     this.placeCursorAtTheEndOnEdit = true,
     this.removeFocusOfTextFieldOnTapOutside = true,
   });
@@ -164,9 +169,9 @@ class EditorModelStyleOptions {
     double? bottom,
     double? right,
   }) {
-    this.editButtonPosTop = top;
-    this.editButtonPosLeft = left;
-    this.editButtonPosBottom = bottom;
-    this.editButtonPosRight = right;
+    editButtonPosTop = top;
+    editButtonPosLeft = left;
+    editButtonPosBottom = bottom;
+    editButtonPosRight = right;
   }
 }

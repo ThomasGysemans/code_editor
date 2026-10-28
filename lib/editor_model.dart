@@ -1,4 +1,4 @@
-part of code_editor;
+part of 'code_editor.dart';
 
 /// Use the EditorModel into CodeEditor in order to control the files.
 class EditorModel extends ChangeNotifier {
@@ -17,67 +17,67 @@ class EditorModel extends ChangeNotifier {
     EditorModelStyleOptions? styleOptions,
   }) {
     this.styleOptions = styleOptions ?? EditorModelStyleOptions();
-    this.allFiles = files ?? [];
+    allFiles = files ?? [];
   }
 
   /// Checks in all the given files if [language] is found,
   /// then returns a `List<String>` of the files' content that uses [language].
   List<String?> getCodeWithLanguage(String language) {
     List<String?> listOfCode = [];
-    this.allFiles.forEach((FileEditor file) {
+    for (var file in allFiles) {
       if (file.language == language) {
         listOfCode.add(file.code);
       }
-    });
+    }
     return listOfCode;
   }
 
   /// Returns the code of the file where [index] corresponds.
   String getCodeWithIndex(int index) {
-    return this.allFiles[index].code;
+    return allFiles[index].code;
   }
 
   /// Returns the file where [index] corresponds.
   FileEditor? getFileWithIndex(int index) {
-    if (index >= this.allFiles.length || index < 0) {
+    if (index >= allFiles.length || index < 0) {
       return null;
     }
-    return this.allFiles[index];
+    return allFiles[index];
   }
 
   /// Switch the file using [i] as index of the `List<FileEditor>` files.
   ///
   /// The user can't change the file if he is editing another one.
   void changeIndexTo(int i) {
-    if (this._isEditing) {
+    if (_isEditing) {
       return;
     }
-    this._currentPositionInFiles = i;
-    this.notify();
+    _currentPositionInFiles = i;
+    notify();
   }
 
   /// Toggle the text field.
   void toggleEditing() {
-    this._isEditing = !this._isEditing;
-    this.notify();
+    _isEditing = !_isEditing;
+    notify();
   }
 
   /// Overwrite the current code of the file where [index] corresponds by [newCode].
   void updateCodeOfIndex(int index, String newCode) {
-    this.allFiles[index].code = newCode;
+    allFiles[index].code = newCode;
   }
 
   void notify() => notifyListeners();
 
   /// Gets the index of which file is currently displayed in the editor.
-  int get position => this._currentPositionInFiles;
+  int get position => _currentPositionInFiles;
 
   /// Gets which language is currently shown.
-  String get currentLanguage => this.allFiles[this._currentPositionInFiles].language;
+  String get currentLanguage => allFiles[_currentPositionInFiles].language;
 
   /// Is the text field shown?
-  bool get isEditing => this._isEditing;
+  bool get isEditing => _isEditing;
 
   /// Gets the number of files.
-  int get numberOfFiles => this.allFiles.length;
+  int get numberOfFiles => allFiles.length;
 }

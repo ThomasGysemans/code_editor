@@ -1,4 +1,4 @@
-part of code_editor;
+part of 'code_editor.dart';
 
 const FontWeight fontWeight = FontWeight.w400;
 
@@ -22,12 +22,12 @@ const Color titlesColor = Color(0xFFDCDC9D); // titles (function's title)
 ///
 /// You can create your own or use
 /// other themes by looking in this import:
-/// 
+///
 /// `import 'package:flutter_highlight/themes/'`.
 const myTheme = {
   'root': TextStyle(
     backgroundColor: Color(0xff2E3152),
-    color: Color(0xffdddddd)
+    color: Color(0xffdddddd),
   ),
   'keyword': TextStyle(color: keywordColor),
   'params': TextStyle(color: Color(0xffde935f)),

@@ -1,3 +1,13 @@
+## [3.0.0] - October 28, 2026
+
++ Make the package compatible with the latest versions of Flutter (3.47) and Dart (3.13)
++ Now requires Dart `>=3.9.0` and Flutter `>=3.35.0` (required by `font_awesome_flutter` 11)
++ **Breaking change**: `EditorModelStyleOptions.toolbarOptions` (deprecated by Flutter) is replaced by `contextMenuBuilder`. By default, the platform's context menu is still used, as before.
++ **Breaking change**: the files of the package were renamed to follow Dart conventions (`ToolButton.dart` is now `tool_button.dart`). This only matters if you imported them directly instead of `package:code_editor/code_editor.dart`.
++ The `CodeEditor` constructor is now `const`
++ Replace deprecated `withOpacity` calls
++ Replace the custom test runner with `flutter_test`, add widget tests and enable `flutter_lints`
+
 ## [2.1.1] - October 28, 2026
 
 + Fix `CodeEditor.empty()`, which crashed because it had no file. It now contains a single empty text file named "file.txt".
