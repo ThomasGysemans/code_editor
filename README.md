@@ -13,9 +13,9 @@ The editor displays the contents of fictitious "files" that correspond to instan
 In other words, with this code editor, you can edit files which contain code. You can switch between the files in the navigation bar to edit their content with tools that make writing easier on phones. Once editing is complete, the code is highlighted according to the imposed theme (by default a custom one).
 You can choose your theme or create your own by checking at `import 'package:flutter_highlight/themes/github.dart';`
 
-![example-1](https://learnweb.sciencesky.fr/code_editor_example-1.png)
-![example-2](https://learnweb.sciencesky.fr/code_editor_example-2.png)
-![example-3](https://learnweb.sciencesky.fr/code_editor_example-3.png)
+![example-1](screenshots/code_editor_example-1.png)
+![example-2](screenshots/code_editor_example-2.png)
+![example-3](screenshots/code_editor_example-3.png)
 
 ## Installation
 
@@ -25,7 +25,7 @@ It's very easy to install :
 
 ```yaml
 dependencies:
-  code_editor: ^2.1.0
+  code_editor: ^2.1.1
 ```
 
 * Don't forget to update the modifications of the pubspec.yaml file

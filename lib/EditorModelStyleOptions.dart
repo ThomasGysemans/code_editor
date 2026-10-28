@@ -25,7 +25,8 @@ class EditorModelStyleOptions {
 
   /// The "undo" and "redo" buttons allow the user to undo or redo the modification of a file.
   ///
-  /// They are automatically hidden if `readonly` is set to `true` on the `CodeEditor` widget.
+  /// They are automatically hidden while the user is editing a file,
+  /// and if `readonly` is set to `true` on the current `FileEditor`.
   final bool showUndoRedoButtons;
 
   /// Set the font family of the entire editor. By default `"monospace"`.

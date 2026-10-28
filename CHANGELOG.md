@@ -1,3 +1,13 @@
+## [2.1.1] - October 28, 2026
+
++ Fix `CodeEditor.empty()`, which crashed because it had no file. It now contains a single empty text file named "file.txt".
++ Fix a crash when two `CodeEditor` widgets were editing at the same time (they shared the same `GlobalKey`)
++ Dispose the `FocusNode` of the text field
++ Hide the undo and redo buttons while editing a file (they were invisible but could still be pressed)
++ Confirming a file without modifying it no longer adds a step to the undo history
++ Fix the text field showing the content of a file from before an undo or a redo
++ Fix the screenshots in the README
+
 ## [2.1.0] - August 7, 2023
 
 + Fix `reverseEditAndUndoRedoButtons` so that the "undo" button is always at the right of the "redo" button.

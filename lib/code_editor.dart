@@ -101,6 +101,7 @@ class CodeEditor extends StatefulWidget {
   }) : super(key: key);
 
   /// Creates a code editor that helps users to write and read code on mobile.
+  /// It contains a single empty text file named "file.txt".
   ///
   /// - [onSubmit] a `Function(String language, String value)` executed when the user submits changes in a file.
   /// - [textModifier] a `String Function(String language, String content)` that allows you to change the modifications of the user before it is saved.
@@ -113,7 +114,7 @@ class CodeEditor extends StatefulWidget {
     this.onSubmit,
     this.formatters = const [],
   }) : super(key: key) {
-    this.model = EditorModel();
+    this.model = EditorModel(files: [FileEditor(name: "file.txt")]);
   }
 
   @override
@@ -129,9 +130,6 @@ class _CodeEditorState extends State<CodeEditor> {
 
   /// The text field wants a focus node.
   FocusNode focusNode = FocusNode();
-
-  /// Initialize the formKey for the text field
-  static final GlobalKey<FormState> editableTextKey = GlobalKey<FormState>();
 
   // For each filename,
   // a stack of undos
@@ -162,6 +160,7 @@ class _CodeEditorState extends State<CodeEditor> {
   @override
   void dispose() {
     editingController.dispose();
+    focusNode.dispose();
     super.dispose();
   }
 
@@ -308,7 +307,6 @@ class _CodeEditorState extends State<CodeEditor> {
               }
             }
           },
-          key: editableTextKey,
           toolbarOptions: widget.model.styleOptions.toolbarOptions,
         ),
       ),
@@ -325,7 +323,8 @@ class _CodeEditorState extends State<CodeEditor> {
     }
     final opt = widget.model.styleOptions;
     List<ElevatedButton> buttons = [];
-    if (widget.model.styleOptions.showUndoRedoButtons) {
+    // The undo and redo buttons are hidden while editing a file
+    if (widget.model.styleOptions.showUndoRedoButtons && !widget.model.isEditing) {
       ElevatedButton undoButton = ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0.0,
@@ -432,19 +431,19 @@ class _CodeEditorState extends State<CodeEditor> {
       final List<ToolButton> toolButtons = [
         ToolButton(
           press: () => insertIntoTextField("\t"),
-          icon: FontAwesomeIcons.indent.data,
+          icon: FontAwesomeIcons.indent,
         ),
         ToolButton(
           press: () => insertIntoTextField("<"),
-          icon: FontAwesomeIcons.chevronLeft.data,
+          icon: FontAwesomeIcons.chevronLeft,
         ),
         ToolButton(
           press: () => insertIntoTextField(">"),
-          icon: FontAwesomeIcons.chevronRight.data,
+          icon: FontAwesomeIcons.chevronRight,
         ),
         ToolButton(
           press: () => insertIntoTextField('""', diff: -1),
-          icon: FontAwesomeIcons.quoteLeft.data,
+          icon: FontAwesomeIcons.quoteLeft,
         ),
         ToolButton(
           press: () => insertIntoTextField(":"),
@@ -468,23 +467,23 @@ class _CodeEditorState extends State<CodeEditor> {
         ),
         ToolButton(
           press: () => insertIntoTextField("-"),
-          icon: FontAwesomeIcons.minus.data,
+          icon: FontAwesomeIcons.minus,
         ),
         ToolButton(
           press: () => insertIntoTextField("="),
-          icon: FontAwesomeIcons.equals.data,
+          icon: FontAwesomeIcons.equals,
         ),
         ToolButton(
           press: () => insertIntoTextField("+"),
-          icon: FontAwesomeIcons.plus.data,
+          icon: FontAwesomeIcons.plus,
         ),
         ToolButton(
           press: () => insertIntoTextField("/"),
-          icon: FontAwesomeIcons.divide.data,
+          icon: FontAwesomeIcons.divide,
         ),
         ToolButton(
           press: () => insertIntoTextField("*"),
-          icon: FontAwesomeIcons.xmark.data,
+          icon: FontAwesomeIcons.xmark,
         ),
       ];
 
@@ -523,7 +522,7 @@ class _CodeEditorState extends State<CodeEditor> {
                         ),
                       )
                     : FaIcon(
-                        FaIconData(btn.icon!),
+                        btn.icon,
                         color: opt.editorToolButtonTextColor,
                         size: 15,
                       ),
@@ -567,8 +566,6 @@ class _CodeEditorState extends State<CodeEditor> {
                 editButton("OK", () {
                   // Here, the user completed a change in the code
                   setState(() {
-                    recordBeforeAction(widget.model.getFileWithIndex(position)!);
-
                     String newCode = newValue ?? "";
                     if (widget.textModifier != null) {
                       newCode = widget.textModifier!(widget.model.currentLanguage, newCode);
@@ -576,6 +573,13 @@ class _CodeEditorState extends State<CodeEditor> {
                     if (widget.formatters.contains(widget.model.currentLanguage)) {
                       newCode = format(newCode, widget.model.currentLanguage);
                     }
+
+                    // Only a real modification can be undone
+                    FileEditor editedFile = widget.model.getFileWithIndex(position)!;
+                    if (newCode != editedFile.code) {
+                      recordBeforeAction(editedFile);
+                    }
+
                     editingController.text = newCode; // without it editing twice the same file in a row would display the previous content
                     widget.model.updateCodeOfIndex(position, newCode);
                     widget.model.toggleEditing();
@@ -615,6 +619,8 @@ class _CodeEditorState extends State<CodeEditor> {
                 ),
                 editButton(opt.editButtonName, () {
                   setState(() {
+                    // the file might have changed since the last edit (undo, redo...)
+                    editingController.text = widget.model.getCodeWithIndex(position);
                     widget.model.toggleEditing();
                   });
                 }),
